@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Phone with a play button (streaming). Kept inside the 66dp safe zone. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <group
+        android:pivotX="54"
+        android:pivotY="54"
+        android:scaleX="0.92"
+        android:scaleY="0.92">
+        <!-- soft glass fill -->
+        <path
+            android:fillColor="#29FFFFFF"
+            android:pathData="M43,28h22a9,9 0 0 1 9,9v38a9,9 0 0 1 -9,9h-22a9,9 0 0 1 -9,-9v-38a9,9 0 0 1 9,-9z" />
+        <!-- phone outline -->
+        <path
+            android:fillColor="#00000000"
+            android:pathData="M43,28h22a9,9 0 0 1 9,9v38a9,9 0 0 1 -9,9h-22a9,9 0 0 1 -9,-9v-38a9,9 0 0 1 9,-9z"
+            android:strokeWidth="4"
+            android:strokeColor="#FFFFFFFF" />
+        <!-- play button -->
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M49,46L63,56L49,66Z"
+            android:strokeWidth="3"
+            android:strokeColor="#FFFFFFFF"
+            android:strokeLineJoin="round" />
+    </group>
+</vector>

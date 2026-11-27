@@ -1,0 +1,31 @@
+# ---- Personal data: never upload ----
+scrcpy-flow.json
+scrcpy-studio.json
+scrcpy-launcher.json
+*.log
+
+# ---- Downloaded add-ons and build output ----
+libs/
+libs.new/
+*.apk
+FlowConnect/.buildtools/
+FlowConnect/.gradle/
+FlowConnect/app/build/
+FlowConnect/build/
+FlowConnect/local.properties
+
+# ---- scrcpy itself (download it from the official releases page) ----
+scrcpy-win64-*/
+scrcpy.exe
+adb.exe
+*.dll
+
+# ---- Signing keys, if you ever add a release key ----
+*.jks
+*.keystore
+
+# ---- Editors / OS ----
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
