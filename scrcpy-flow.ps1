@@ -511,6 +511,7 @@ function New-DefaultState {
         RecordFormat  = 'mp4'
         TimeLimit     = 0
         AutoConnect   = $false
+        Theme         = 'Midnight'
         DefaultDevice = ''
         LastDevice    = ''
         Devices       = @()
@@ -523,7 +524,7 @@ function Load-State {
     if (Test-Path -LiteralPath $StatePath) {
         try {
             $j = Get-Content -LiteralPath $StatePath -Raw | ConvertFrom-Json
-            foreach ($k in 'ScrcpyPath', 'RecordDir', 'ShotDir', 'RecordFormat', 'TimeLimit', 'AutoConnect', 'DefaultDevice', 'LastDevice') {
+            foreach ($k in 'ScrcpyPath', 'RecordDir', 'ShotDir', 'RecordFormat', 'TimeLimit', 'AutoConnect', 'DefaultDevice', 'LastDevice', 'Theme') {
                 if ($null -ne $j.$k -and "$($j.$k)" -ne '') { $s.$k = $j.$k }
             }
             $devs = @()
@@ -922,6 +923,10 @@ $XamlText = @'
         FontFamily="Segoe UI Variable Text, Segoe UI" FontSize="14" Foreground="#E8EAED"
         UseLayoutRounding="True" SnapsToDevicePixels="True">
   <Window.Resources>
+    <!-- =============================================================
+         ATOMS: design tokens (colour, gradients, type, motion, icons).
+         Written in Midnight colours; themes remap them at start-up.
+         ============================================================= -->
     <SolidColorBrush x:Key="BrBg" Color="#0F1115"/>
     <SolidColorBrush x:Key="BrSide" Color="#13161C"/>
     <SolidColorBrush x:Key="BrCard" Color="#181C23"/>
@@ -1006,6 +1011,11 @@ $XamlText = @'
       <Setter Property="Margin" Value="0,1,8,0"/>
     </Style>
 
+    <!-- =============================================================
+         MOLECULES: single controls built from atoms
+         (focus ring, buttons, nav item, switch, text box, combo box,
+         slider, scrollbar, tooltip)
+         ============================================================= -->
     <!-- Keyboard focus ring (shows only when using Tab / arrow keys) -->
     <Style x:Key="FocusRing">
       <Setter Property="Control.Template">
@@ -1015,16 +1025,6 @@ $XamlText = @'
           </ControlTemplate>
         </Setter.Value>
       </Setter>
-    </Style>
-
-    <!-- Card -->
-    <Style x:Key="CardBox" TargetType="Border">
-      <Setter Property="Background" Value="{StaticResource GrCard}"/>
-      <Setter Property="BorderBrush" Value="{StaticResource GrCardLine}"/>
-      <Setter Property="BorderThickness" Value="1"/>
-      <Setter Property="CornerRadius" Value="14"/>
-      <Setter Property="Padding" Value="20"/>
-      <Setter Property="Margin" Value="0,0,0,16"/>
     </Style>
 
     <!-- Buttons: smooth hover glow and press "squish" -->
@@ -1108,7 +1108,7 @@ $XamlText = @'
     <Style x:Key="AccentBtn" TargetType="Button" BasedOn="{StaticResource BtnBase}">
       <Setter Property="Background" Value="{StaticResource GrAccent}"/>
       <Setter Property="BorderBrush" Value="#00000000"/>
-      <Setter Property="Foreground" Value="White"/>
+      <Setter Property="Foreground" Value="#FFFFFE"/>
       <Style.Triggers>
         <Trigger Property="IsMouseOver" Value="True">
           <Setter Property="BorderBrush" Value="#00000000"/>
@@ -1493,6 +1493,23 @@ $XamlText = @'
         </Setter.Value>
       </Setter>
     </Style>
+
+    <!-- =============================================================
+         ORGANISMS: groups of molecules. CardBox is the section card;
+         rows, session rows and media tiles are built in code
+         (New-Row, Add-SessionRow, Render-Saved, Render-Detected).
+         TEMPLATE: sidebar (236) + page header + scrolling page (32 padding).
+         PAGES: PageHome, PageDevices, PageGaming, PageMedia, PageSettings.
+         ============================================================= -->
+    <!-- Card -->
+    <Style x:Key="CardBox" TargetType="Border">
+      <Setter Property="Background" Value="{StaticResource GrCard}"/>
+      <Setter Property="BorderBrush" Value="{StaticResource GrCardLine}"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="CornerRadius" Value="14"/>
+      <Setter Property="Padding" Value="20"/>
+      <Setter Property="Margin" Value="0,0,0,16"/>
+    </Style>
   </Window.Resources>
 
   <Grid>
@@ -1523,15 +1540,9 @@ $XamlText = @'
     <Border Background="{StaticResource GrSide}" BorderBrush="{StaticResource BrLine}" BorderThickness="0,0,1,0">
       <DockPanel>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="22,24,16,28">
-          <Border Width="40" Height="40" CornerRadius="11">
-            <Border.Background>
-              <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                <GradientStop Color="#5B8CFF" Offset="0"/>
-                <GradientStop Color="#8B5CFF" Offset="1"/>
-              </LinearGradientBrush>
-            </Border.Background>
+          <Border Width="40" Height="40" CornerRadius="11" Background="{StaticResource GrAccent}">
             <Grid>
-              <TextBlock x:Name="LogoGlyph" FontFamily="{StaticResource Icons}" Text="&#xE8EA;" FontSize="19" Foreground="White"
+              <TextBlock x:Name="LogoGlyph" FontFamily="{StaticResource Icons}" Text="&#xE8EA;" FontSize="19" Foreground="#FFFFFE"
                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
               <Image x:Name="LogoImg" Width="26" Height="26"/>
             </Grid>
@@ -1575,8 +1586,8 @@ $XamlText = @'
 
       <Grid Margin="32,24,32,14">
         <StackPanel>
-          <TextBlock x:Name="PageTitle" Text="Home" FontSize="28" FontWeight="SemiBold" Foreground="{StaticResource BrText}"/>
-          <TextBlock x:Name="PageSub" Text="" FontSize="14" Foreground="{StaticResource BrSub}" Margin="0,4,0,0"/>
+          <TextBlock x:Name="PageTitle" Text="Home" FontSize="28" FontWeight="SemiBold" Foreground="#FFFFFC"/>
+          <TextBlock x:Name="PageSub" Text="" FontSize="14" Foreground="#FFFFFB" Margin="0,4,0,0"/>
         </StackPanel>
         <Border HorizontalAlignment="Right" VerticalAlignment="Center" CornerRadius="16" Padding="14,7"
                 Background="#181C23" BorderBrush="{StaticResource BrLine}" BorderThickness="1">
@@ -1626,11 +1637,11 @@ $XamlText = @'
                 <StackPanel>
                   <StackPanel Orientation="Horizontal">
                     <Border Width="54" Height="54" CornerRadius="15" Background="{StaticResource GrAccent}">
-                      <TextBlock FontFamily="{StaticResource Icons}" Text="&#xE8EA;" FontSize="25" Foreground="White"
+                      <TextBlock FontFamily="{StaticResource Icons}" Text="&#xE8EA;" FontSize="25" Foreground="#FFFFFE"
                                  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                     <StackPanel Margin="16,0,0,0" VerticalAlignment="Center">
-                      <TextBlock x:Name="InfoName" Text="No phone" FontSize="24" FontWeight="SemiBold" Foreground="White"
+                      <TextBlock x:Name="InfoName" Text="No phone" FontSize="24" FontWeight="SemiBold" Foreground="#FFFFFD"
                                  TextTrimming="CharacterEllipsis" MaxWidth="440"/>
                       <TextBlock x:Name="InfoAddr" Text="" Foreground="#B9C3E6" FontSize="12" Margin="0,3,0,0"
                                  TextTrimming="CharacterEllipsis" MaxWidth="460"/>
@@ -1642,25 +1653,25 @@ $XamlText = @'
                     <Border Background="#1FFFFFFF" CornerRadius="12" Padding="14,9" Margin="0,0,10,10" MinWidth="110">
                       <StackPanel>
                         <TextBlock Text="Battery" FontSize="12" Foreground="#B4C0E6"/>
-                        <TextBlock x:Name="InfoBattery" Text="-" FontSize="16" FontWeight="SemiBold" Foreground="White" Margin="0,2,0,0"/>
+                        <TextBlock x:Name="InfoBattery" Text="-" FontSize="16" FontWeight="SemiBold" Foreground="#FFFFFD" Margin="0,2,0,0"/>
                       </StackPanel>
                     </Border>
                     <Border Background="#1FFFFFFF" CornerRadius="12" Padding="14,9" Margin="0,0,10,10" MinWidth="110">
                       <StackPanel>
                         <TextBlock Text="Android" FontSize="12" Foreground="#B4C0E6"/>
-                        <TextBlock x:Name="InfoAndroid" Text="-" FontSize="16" FontWeight="SemiBold" Foreground="White" Margin="0,2,0,0"/>
+                        <TextBlock x:Name="InfoAndroid" Text="-" FontSize="16" FontWeight="SemiBold" Foreground="#FFFFFD" Margin="0,2,0,0"/>
                       </StackPanel>
                     </Border>
                     <Border Background="#1FFFFFFF" CornerRadius="12" Padding="14,9" Margin="0,0,10,10" MinWidth="110">
                       <StackPanel>
                         <TextBlock Text="Connection" FontSize="12" Foreground="#B4C0E6"/>
-                        <TextBlock x:Name="InfoConn" Text="-" FontSize="16" FontWeight="SemiBold" Foreground="White" Margin="0,2,0,0"/>
+                        <TextBlock x:Name="InfoConn" Text="-" FontSize="16" FontWeight="SemiBold" Foreground="#FFFFFD" Margin="0,2,0,0"/>
                       </StackPanel>
                     </Border>
                     <Border Background="#1FFFFFFF" CornerRadius="12" Padding="14,9" Margin="0,0,10,10" MinWidth="110">
                       <StackPanel>
                         <TextBlock Text="Profile" FontSize="12" Foreground="#B4C0E6"/>
-                        <TextBlock x:Name="InfoProfile" Text="-" FontSize="16" FontWeight="SemiBold" Foreground="White" Margin="0,2,0,0"
+                        <TextBlock x:Name="InfoProfile" Text="-" FontSize="16" FontWeight="SemiBold" Foreground="#FFFFFD" Margin="0,2,0,0"
                                    TextTrimming="CharacterEllipsis" MaxWidth="160"/>
                       </StackPanel>
                     </Border>
@@ -1724,7 +1735,7 @@ $XamlText = @'
                   <TextBlock Style="{StaticResource IconText}" Text="&#xE7F4;" Foreground="#3DDC97" FontSize="15"/>
                   <TextBlock Text="Running now" Style="{StaticResource H2}"/>
                   <Border x:Name="SessionCountBadge" Background="{StaticResource GrAccent}" CornerRadius="8" Padding="8,1" Margin="10,0,0,0" VerticalAlignment="Center">
-                    <TextBlock x:Name="SessionCount" Text="0" FontSize="11" FontWeight="SemiBold" Foreground="White"/>
+                    <TextBlock x:Name="SessionCount" Text="0" FontSize="11" FontWeight="SemiBold" Foreground="#FFFFFE"/>
                   </Border>
                 </StackPanel>
                 <StackPanel x:Name="SessionEmpty" Orientation="Horizontal" Margin="0,8,0,0">
@@ -1923,11 +1934,11 @@ $XamlText = @'
                   <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Border Width="64" Height="64" CornerRadius="16" Background="#33FFFFFF" VerticalAlignment="Center">
-                  <TextBlock FontFamily="{StaticResource Icons}" Text="&#xE7FC;" FontSize="30" Foreground="White"
+                  <TextBlock FontFamily="{StaticResource Icons}" Text="&#xE7FC;" FontSize="30" Foreground="#FFFFFD"
                              HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
                 <StackPanel Grid.Column="1" Margin="20,0,20,0" VerticalAlignment="Center">
-                  <TextBlock Text="Game Mode" FontSize="22" FontWeight="SemiBold" Foreground="White"/>
+                  <TextBlock Text="Game Mode" FontSize="22" FontWeight="SemiBold" Foreground="#FFFFFD"/>
                   <TextBlock Text="High frame rate, low latency, and real keyboard, mouse and controller input. Changes here are saved to the Gaming profile."
                              Foreground="#C9CFF5" TextWrapping="Wrap" Margin="0,4,0,0"/>
                   <Grid Margin="0,14,0,0" MaxWidth="420" HorizontalAlignment="Left">
@@ -2146,6 +2157,30 @@ $XamlText = @'
                 </Grid.ColumnDefinitions>
                 <StackPanel>
                   <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource IconText}" Text="&#xE790;" Foreground="#9DB8FF" FontSize="15"/>
+                    <TextBlock Text="Appearance" Style="{StaticResource H2}"/>
+                  </StackPanel>
+                  <TextBlock Text="Pick a colour theme. The squares show its colours. Apply restarts Scrcpy Flow in the new theme." Style="{StaticResource Hint}"/>
+                  <StackPanel x:Name="ThemeSwatch" Orientation="Horizontal" Margin="0,12,0,0"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="16,0,0,0">
+                  <TextBlock Text="Theme" Style="{StaticResource Label}" Margin="0,0,0,6"/>
+                  <StackPanel Orientation="Horizontal">
+                    <ComboBox x:Name="ATheme" Width="200"/>
+                    <Button x:Name="BtnApplyTheme" Style="{StaticResource AccentBtn}" Content="Apply" Margin="8,0,0,0" IsEnabled="False"/>
+                  </StackPanel>
+                </StackPanel>
+              </Grid>
+            </Border>
+
+            <Border Style="{StaticResource CardBox}">
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                  <StackPanel Orientation="Horizontal">
                     <TextBlock Style="{StaticResource IconText}" Text="&#xE945;" Foreground="#C9B4FF" FontSize="15"/>
                     <TextBlock Text="Animations" Style="{StaticResource H2}"/>
                   </StackPanel>
@@ -2340,6 +2375,190 @@ $XamlText = @'
 </Window>
 '@
 # =====================================================================
+#  Themes. Midnight is the original look; other themes swap its colours
+#  when the window is built (keys are Midnight colours, RRGGBB).
+# =====================================================================
+$Themes = [ordered]@{
+    'Midnight' = @{ Dark = $true; Caption = 0x0015110F; Swatch = @('0F1115', '1C212B', '3F6BE6', '7A4FF0'); Map = @{ 'FFFFFC' = 'E8EAED'; 'FFFFFB' = 'A3ACB9' } }
+    'Khaki'    = @{ Dark = $false; Caption = 0x00D6E7ED; Swatch = @('EDE7D6', 'F8F4EA', '556B2F', '7B5E34'); Map = @{
+        # surfaces
+        '0F1115' = 'EDE7D6'; '13161C' = 'E5DDC6'; '181C23' = 'F7F3E8'; '20252F' = 'E9E2CE'
+        '11141A' = 'FCFAF4'; '12151B' = 'FCFAF4'; '0E1116' = 'FCFAF4'; '1B1F27' = 'FCFAF4'
+        '1C212B' = 'F8F4EA'; '161A21' = 'F2EDE0'; '363F50' = 'D6CBB0'; '22272F' = 'CFC4A8'
+        '222838' = 'EEE8D9'; '1B1F28' = 'E9E2D0'; '232A3A' = 'EEE8D9'; '1D222C' = 'EEE8D9'
+        '33456F' = 'DDD5B8'; '2E2A52' = 'D5CBAA'; '171B28' = 'E6DFCB'; '111318' = 'E0D8C2'
+        '2A3A6C' = 'D9D0B0'; '232B4A' = 'DED6BA'; '26365F' = 'E6DEC6'; '2B2456' = 'DFD5B8'
+        '3A4F8A' = 'C2B48C'; '171B22' = 'EFE9DA'; '262C38' = 'FBF8F1'; '252B36' = 'D8CFB6'
+        '24304A' = 'E2DAC2'; '2A3140' = 'EAE3D1'; '343B48' = 'C9BE9F'
+        # lines
+        '2A303B' = 'D3C8AE'; '3C4454' = 'B5A783'; '2F3642' = 'CFC4A8'; '3A4150' = 'BFB291'
+        # hero cards stay dark (olive) so their white text keeps working
+        '263866' = '59633A'; '1D2344' = '4A5230'; '2C2052' = '5E4E32'; '3A4A7A' = '7A7F52'
+        '2B2560' = '5E4E32'; '16243F' = '4A5230'; '3A3F6B' = '7A7F52'
+        'B9C3E6' = 'E8E0C4'; 'B4C0E6' = 'E3DBBE'; 'D6DCF5' = 'F1EBD6'; 'C9CFF5' = 'E8E0C4'
+        # text
+        'E8EAED' = '2B2A22'; 'FFFFFF' = '2B2A22'; 'A3ACB9' = '5E5848'; '9AA3AF' = '6F6855'
+        'B7BFCB' = '4E4838'; 'C9CFD8' = '3E3A2E'; 'B9C0CA' = '4A4535'; '6B7380' = '8A8068'
+        # accent: olive and khaki brown
+        '5B8CFF' = '5C6B2E'; '9DB8FF' = '5C6B2E'; '8FB0FF' = '5C6B2E'; '8B7CFF' = '6B7A35'
+        '8B5CFF' = '8A6D3B'; '3F6BE6' = '556B2F'; '7A4FF0' = '7B5E34'; 'C9B4FF' = '7B5E34'
+        '6E8BFF' = '7A8A45'; '6A4CFF' = 'B59A5C'; '3D7BFF' = '8A9A5B'
+        # status
+        '3DDC97' = '24693F'; 'FFB547' = '8A5508'; 'FF5C6C' = 'B23A3A'; 'FF8A95' = 'B23A3A'
+        '0A0C10' = '2E2A1F'; 'FFFFFE' = 'FFFFFF'; 'FFFFFD' = 'FFFFFF'; 'FFFFFC' = '2B2A22'; 'FFFFFB' = '5E5848'
+    } }
+    'Twilight' = @{ Dark = $true; Caption = 0x00361D22; Swatch = @('453C67', '6D67E4', '46C2CB', 'F2F7A1'); Map = @{
+        # flat colours (both ends of every gradient get the same value)
+        '0F1115' = '221D36'; '13161C' = '1D1930'; '181C23' = '2C2645'; '20252F' = '453C67'
+        '11141A' = '1B172D'; '12151B' = '1B172D'; '0E1116' = '1B172D'; '1B1F27' = '2C2645'
+        '1C212B' = '2F2849'; '161A21' = '2F2849'; '363F50' = '453C67'; '22272F' = '453C67'
+        '222838' = '3A3358'; '1B1F28' = '3A3358'; '232A3A' = '3A3358'; '1D222C' = '3A3358'
+        '33456F' = '453C67'; '2E2A52' = '453C67'; '171B28' = '1D1930'; '111318' = '1D1930'
+        '2A3A6C' = '453C67'; '232B4A' = '453C67'; '26365F' = '3A3358'; '2B2456' = '3A3358'
+        '3A4F8A' = '6D67E4'; '171B22' = '2C2645'; '262C38' = '3A3358'; '252B36' = '2C2645'
+        '24304A' = '453C67'; '2A3140' = '3A3358'; '343B48' = '5A5185'
+        '2A303B' = '453C67'; '3C4454' = '5E5590'; '2F3642' = '4F4675'; '3A4150' = '5A5185'
+        '263866' = '453C67'; '1D2344' = '453C67'; '2C2052' = '453C67'; '3A4A7A' = '6D67E4'
+        '2B2560' = '453C67'; '16243F' = '453C67'; '3A3F6B' = '6D67E4'
+        'B9C3E6' = 'D9D4F0'; 'B4C0E6' = 'D9D4F0'; 'D6DCF5' = 'F3F1FA'; 'C9CFF5' = 'D9D4F0'
+        'E8EAED' = 'F3F1FA'; 'A3ACB9' = 'B9B3D6'; '9AA3AF' = 'A9A2C9'; 'B7BFCB' = 'C9C3E3'
+        'C9CFD8' = 'DCD8EE'; 'B9C0CA' = 'C9C3E3'; '6B7380' = '7A7399'
+        '5B8CFF' = '46C2CB'; '9DB8FF' = '46C2CB'; '8FB0FF' = 'F2F7A1'; '8B7CFF' = '46C2CB'
+        '8B5CFF' = '6560DD'; '3F6BE6' = '6560DD'; '7A4FF0' = '6560DD'; 'C9B4FF' = 'F2F7A1'
+        '6E8BFF' = '6D67E4'; '6A4CFF' = '221D36'; '3D7BFF' = '221D36'
+        '3DDC97' = '7BE0A6'; 'FFB547' = 'F2F7A1'; 'FF5C6C' = 'FF7A8A'; 'FF8A95' = 'FF9AA6'
+        '0A0C10' = '0E0B18'; 'FFFFFC' = 'F3F1FA'; 'FFFFFB' = 'B9B3D6'
+    } }
+    'Sky' = @{ Dark = $true; Caption = 0x00E86A1F; Swatch = @('2373F4', '578EF5', '65D0F4', 'F2F7A0'); Map = @{
+        # flat colours, from the top of the palette (blue background) down to the bottom (yellow buttons)
+        '0F1115' = '1F6AE8'; '13161C' = '1F6AE8'; '181C23' = '578EF5'; '20252F' = '6A9BF7'
+        '11141A' = 'EAF2FF'; '12151B' = 'EAF2FF'; '0E1116' = 'EAF2FF'; '1B1F27' = 'EAF2FF'
+        '1C212B' = '578EF5'; '161A21' = '578EF5'; '363F50' = '4A80EC'; '22272F' = '4A80EC'
+        '222838' = '6A9BF7'; '1B1F28' = '6A9BF7'; '232A3A' = '6A9BF7'; '1D222C' = '6A9BF7'
+        '33456F' = '65D0F4'; '2E2A52' = '65D0F4'; '171B28' = '578EF5'; '111318' = '578EF5'
+        '2A3A6C' = '65D0F4'; '232B4A' = '65D0F4'; '26365F' = '65D0F4'; '2B2456' = '65D0F4'
+        '3A4F8A' = 'F2F7A0'; '171B22' = '6A9BF7'; '262C38' = 'EAF2FF'; '252B36' = '4A80EC'
+        '24304A' = '65D0F4'; '2A3140' = 'D6E6FF'; '343B48' = '2E62C8'
+        '2A303B' = '4A80EC'; '3C4454' = '2E62C8'; '2F3642' = '4A80EC'; '3A4150' = '2E62C8'
+        '263866' = '65D0F4'; '1D2344' = '65D0F4'; '2C2052' = '65D0F4'; '3A4A7A' = 'F2F7A0'
+        '2B2560' = '65D0F4'; '16243F' = '65D0F4'; '3A3F6B' = 'F2F7A0'
+        'B9C3E6' = '14254F'; 'B4C0E6' = '14254F'; 'D6DCF5' = '0A1A3D'; 'C9CFF5' = '14254F'; 'FFFFFD' = '0A1A3D'
+        'FFFFFC' = 'FFFFFF'; 'FFFFFB' = 'FFFFFF'
+        'E8EAED' = '0A1A3D'; 'FFFFFF' = '0A1A3D'; 'FFFFFE' = '0A1A3D'; 'A3ACB9' = '14254F'; '9AA3AF' = '14254F'
+        'B7BFCB' = '0A1A3D'; 'C9CFD8' = '0A1A3D'; 'B9C0CA' = '14254F'; '6B7380' = '2E4A80'
+        '5B8CFF' = '0A1A3D'; '9DB8FF' = '0A1A3D'; '8FB0FF' = 'F2F7A0'; '8B7CFF' = '0A1A3D'
+        '8B5CFF' = 'F2F7A0'; '3F6BE6' = 'F2F7A0'; '7A4FF0' = 'F2F7A0'; 'C9B4FF' = '0A1A3D'
+        '6E8BFF' = 'F2F7A0'; '6A4CFF' = '1F6AE8'; '3D7BFF' = '1F6AE8'
+        '3DDC97' = '052E19'; 'FFB547' = '3A2500'; 'FF5C6C' = '4A0711'; 'FF8A95' = '4A0711'
+        '0A0C10' = '0A1A3D'
+    } }
+    'Cream' = @{ Dark = $false; Caption = 0x00C6F2FF; Swatch = @('FFF2C6', 'FFF8DE', 'AAC4F5', '8CA9FF'); Map = @{
+        '0F1115' = 'FFF2C6'; '13161C' = 'FFEDB8'; '181C23' = 'FFF8DE'; '20252F' = 'FBEDC0'
+        '11141A' = 'FFFCEE'; '12151B' = 'FFFCEE'; '0E1116' = 'FFFCEE'; '1B1F27' = 'FFFCEE'
+        '1C212B' = 'FFF8DE'; '161A21' = 'FFF8DE'; '363F50' = 'E9D9A6'; '22272F' = 'E9D9A6'
+        '222838' = 'FDF0CC'; '1B1F28' = 'FDF0CC'; '232A3A' = 'FDF0CC'; '1D222C' = 'FDF0CC'
+        '33456F' = 'DDE6FB'; '2E2A52' = 'DDE6FB'; '171B28' = 'FFF8DE'; '111318' = 'FFF8DE'
+        '2A3A6C' = 'AAC4F5'; '232B4A' = 'AAC4F5'; '26365F' = 'DDE6FB'; '2B2456' = 'DDE6FB'
+        '3A4F8A' = 'AAC4F5'; '171B22' = 'FFF2C6'; '262C38' = 'FFFCEE'; '252B36' = 'F1E3B5'
+        '24304A' = 'DDE6FB'; '2A3140' = 'FBEDC0'; '343B48' = 'E2CF95'; '2A303B' = 'E9D9A6'
+        '3C4454' = 'D4BE7E'; '2F3642' = 'E9D9A6'; '3A4150' = 'D9C68C'; '263866' = 'AAC4F5'
+        '1D2344' = 'AAC4F5'; '2C2052' = 'AAC4F5'; '3A4A7A' = '8CA9FF'; '2B2560' = 'AAC4F5'
+        '16243F' = 'AAC4F5'; '3A3F6B' = '8CA9FF'; 'B9C3E6' = '2B3566'; 'B4C0E6' = '2B3566'
+        'D6DCF5' = '1F2540'; 'C9CFF5' = '2B3566'; 'FFFFFD' = '1F2540'; 'E8EAED' = '1F2540'
+        'FFFFFF' = '1F2540'; 'FFFFFE' = '1F2540'; 'A3ACB9' = '4E5370'; '9AA3AF' = '6A6F8A'
+        'B7BFCB' = '3B4166'; 'C9CFD8' = '2E3456'; 'B9C0CA' = '3B4166'; '6B7380' = '8A8FA8'
+        '5B8CFF' = '3B5BDB'; '9DB8FF' = '3B5BDB'; '8FB0FF' = '3B5BDB'; '8B7CFF' = '3B5BDB'
+        '8B5CFF' = '8CA9FF'; '3F6BE6' = '8CA9FF'; '7A4FF0' = '8CA9FF'; 'C9B4FF' = '3B5BDB'
+        '6E8BFF' = '8CA9FF'; '6A4CFF' = 'FFF2C6'; '3D7BFF' = 'FFF2C6'; '3DDC97' = '1E7A4E'
+        'FFB547' = '9A6200'; 'FF5C6C' = 'C0394B'; 'FF8A95' = 'C0394B'; '0A0C10' = '1F2540'
+        'FFFFFC' = '1F2540'; 'FFFFFB' = '4E5370'
+    } }
+    'Sky Light' = @{ Dark = $false; Caption = 0x00A0F7F2; Swatch = @('F2F7A0', '65D0F4', '578EF5', '2373F4'); Map = @{
+        '0F1115' = 'F2F7A0'; '13161C' = 'EEF48E'; '181C23' = 'FBFDE3'; '20252F' = 'F1F5B8'
+        '11141A' = 'FFFFF5'; '12151B' = 'FFFFF5'; '0E1116' = 'FFFFF5'; '1B1F27' = 'FFFFF5'
+        '1C212B' = 'FBFDE3'; '161A21' = 'FBFDE3'; '363F50' = 'DCE38A'; '22272F' = 'DCE38A'
+        '222838' = 'F5F9CC'; '1B1F28' = 'F5F9CC'; '232A3A' = 'F5F9CC'; '1D222C' = 'F5F9CC'
+        '33456F' = 'B6E8FA'; '2E2A52' = 'B6E8FA'; '171B28' = 'FBFDE3'; '111318' = 'FBFDE3'
+        '2A3A6C' = '65D0F4'; '232B4A' = '65D0F4'; '26365F' = 'B6E8FA'; '2B2456' = 'B6E8FA'
+        '3A4F8A' = '65D0F4'; '171B22' = 'F2F7A0'; '262C38' = 'FFFFF5'; '252B36' = 'E3E99A'
+        '24304A' = 'B6E8FA'; '2A3140' = 'F1F5B8'; '343B48' = 'D2D98A'; '2A303B' = 'DCE38A'
+        '3C4454' = 'C3CB6E'; '2F3642' = 'DCE38A'; '3A4150' = 'C8D078'; '263866' = '65D0F4'
+        '1D2344' = '65D0F4'; '2C2052' = '65D0F4'; '3A4A7A' = '578EF5'; '2B2560' = '65D0F4'
+        '16243F' = '65D0F4'; '3A3F6B' = '578EF5'; 'B9C3E6' = '1E3A66'; 'B4C0E6' = '1E3A66'
+        'D6DCF5' = '10224A'; 'C9CFF5' = '1E3A66'; 'FFFFFD' = '10224A'; 'FFFFFC' = '10224A'
+        'FFFFFB' = '3C4A66'; 'E8EAED' = '10224A'; 'FFFFFF' = '10224A'; 'FFFFFE' = 'FFFFFF'
+        'A3ACB9' = '3C4A66'; '9AA3AF' = '7A879E'; 'B7BFCB' = '2A3756'; 'C9CFD8' = '1F2D4D'
+        'B9C0CA' = '2A3756'; '6B7380' = '7A879E'; '5B8CFF' = '1A5FD6'; '9DB8FF' = '1A5FD6'
+        '8FB0FF' = '1A5FD6'; '8B7CFF' = '1A5FD6'; '8B5CFF' = '1F69E6'; '3F6BE6' = '1F69E6'
+        '7A4FF0' = '1F69E6'; 'C9B4FF' = '1A5FD6'; '6E8BFF' = '578EF5'; '6A4CFF' = 'F2F7A0'
+        '3D7BFF' = 'F2F7A0'; '3DDC97' = '1E7A4E'; 'FFB547' = '8A5A00'; 'FF5C6C' = 'B8323F'
+        'FF8A95' = 'B8323F'; '0A0C10' = '10224A'
+    } }
+    'Lavender' = @{ Dark = $false; Caption = 0x00C48A89; Swatch = @('898AC4', 'A2AADB', 'C0C9EE', 'FFF2E0'); Map = @{
+        '0F1115' = '898AC4'; '13161C' = '898AC4'; '181C23' = 'A2AADB'; '20252F' = 'C0C9EE'
+        '11141A' = 'FFF8EE'; '12151B' = 'FFF8EE'; '0E1116' = 'FFF8EE'; '1B1F27' = 'FFF8EE'
+        '1C212B' = 'A2AADB'; '161A21' = 'A2AADB'; '363F50' = '898AC4'; '22272F' = '898AC4'
+        '222838' = 'B2BAE6'; '1B1F28' = 'B2BAE6'; '232A3A' = 'B2BAE6'; '1D222C' = 'B2BAE6'
+        '33456F' = 'C0C9EE'; '2E2A52' = 'C0C9EE'; '171B28' = 'A2AADB'; '111318' = 'A2AADB'
+        '2A3A6C' = 'FFF2E0'; '232B4A' = 'FFF2E0'; '26365F' = 'C0C9EE'; '2B2456' = 'C0C9EE'
+        '3A4F8A' = 'FFF2E0'; '171B22' = 'B2BAE6'; '262C38' = 'FFF8EE'; '252B36' = '898AC4'
+        '24304A' = 'C0C9EE'; '2A3140' = 'E4E8F8'; '343B48' = '6E70A8'; '2A303B' = '898AC4'
+        '3C4454' = '6E70A8'; '2F3642' = '898AC4'; '3A4150' = '6E70A8'; '263866' = 'C0C9EE'
+        '1D2344' = 'C0C9EE'; '2C2052' = 'C0C9EE'; '3A4A7A' = 'FFF2E0'; '2B2560' = 'C0C9EE'
+        '16243F' = 'C0C9EE'; '3A3F6B' = 'FFF2E0'; 'B9C3E6' = '202244'; 'B4C0E6' = '202244'
+        'D6DCF5' = '1E1F3B'; 'C9CFF5' = '202244'; 'FFFFFD' = '1E1F3B'; 'E8EAED' = '1E1F3B'
+        'FFFFFF' = '1E1F3B'; 'FFFFFE' = '1E1F3B'; 'A3ACB9' = '202244'; '9AA3AF' = '3A3D6E'
+        'B7BFCB' = '1E1F3B'; 'C9CFD8' = '1E1F3B'; 'B9C0CA' = '202244'; '6B7380' = '4A4C70'
+        '5B8CFF' = '2A2C55'; '9DB8FF' = '2A2C55'; '8FB0FF' = 'FFF2E0'; '8B7CFF' = '2A2C55'
+        '8B5CFF' = 'FFF2E0'; '3F6BE6' = 'FFF2E0'; '7A4FF0' = 'FFF2E0'; 'C9B4FF' = '2A2C55'
+        '6E8BFF' = 'FFF2E0'; '6A4CFF' = '898AC4'; '3D7BFF' = '898AC4'; '3DDC97' = '0E3F23'
+        'FFB547' = '4F3200'; 'FF5C6C' = '6E1422'; 'FF8A95' = '6E1422'; '0A0C10' = '1E1F3B'
+        'FFFFFC' = '1E1F3B'; 'FFFFFB' = '202244'
+    } }
+    'Lavender Cream' = @{ Dark = $false; Caption = 0x00E0F2FF; Swatch = @('FFF2E0', 'C0C9EE', 'A2AADB', '898AC4'); Map = @{
+        '0F1115' = 'FFF2E0'; '13161C' = 'FBEAD2'; '181C23' = 'FFF8EE'; '20252F' = 'F3E6CF'
+        '11141A' = 'FFFDF8'; '12151B' = 'FFFDF8'; '0E1116' = 'FFFDF8'; '1B1F27' = 'FFFDF8'
+        '1C212B' = 'FFF8EE'; '161A21' = 'FFF8EE'; '363F50' = 'E6D8BF'; '22272F' = 'E6D8BF'
+        '222838' = 'F7EBD8'; '1B1F28' = 'F7EBD8'; '232A3A' = 'F7EBD8'; '1D222C' = 'F7EBD8'
+        '33456F' = 'C0C9EE'; '2E2A52' = 'C0C9EE'; '171B28' = 'FFF8EE'; '111318' = 'FFF8EE'
+        '2A3A6C' = 'C0C9EE'; '232B4A' = 'C0C9EE'; '26365F' = 'C0C9EE'; '2B2456' = 'C0C9EE'
+        '3A4F8A' = 'A2AADB'; '171B22' = 'FFF2E0'; '262C38' = 'FFFDF8'; '252B36' = 'E9DCC4'
+        '24304A' = 'C0C9EE'; '2A3140' = 'F3E6CF'; '343B48' = 'D9CBB0'; '2A303B' = 'E6D8BF'
+        '3C4454' = 'CDBFA4'; '2F3642' = 'E6D8BF'; '3A4150' = 'D3C4A6'; '263866' = 'A2AADB'
+        '1D2344' = 'A2AADB'; '2C2052' = 'A2AADB'; '3A4A7A' = '898AC4'; '2B2560' = 'A2AADB'
+        '16243F' = 'A2AADB'; '3A3F6B' = '898AC4'; 'B9C3E6' = '2A2C55'; 'B4C0E6' = '2A2C55'
+        'D6DCF5' = '1E1F3B'; 'C9CFF5' = '2A2C55'; 'FFFFFD' = '1E1F3B'; 'E8EAED' = '1E1F3B'
+        'FFFFFF' = '1E1F3B'; 'FFFFFE' = '1E1F3B'; 'A3ACB9' = '4A4C70'; '9AA3AF' = '6E7094'
+        'B7BFCB' = '3A3D63'; 'C9CFD8' = '2A2C55'; 'B9C0CA' = '3A3D63'; '6B7380' = '8E8AA0'
+        '5B8CFF' = '55579E'; '9DB8FF' = '55579E'; '8FB0FF' = '55579E'; '8B7CFF' = '55579E'
+        '8B5CFF' = '898AC4'; '3F6BE6' = '898AC4'; '7A4FF0' = '898AC4'; 'C9B4FF' = '55579E'
+        '6E8BFF' = '898AC4'; '6A4CFF' = 'FFF2E0'; '3D7BFF' = 'FFF2E0'; '3DDC97' = '1E7A4E'
+        'FFB547' = '9A6200'; 'FF5C6C' = 'B83A4B'; 'FF8A95' = 'B83A4B'; '0A0C10' = '1E1F3B'
+        'FFFFFC' = '1E1F3B'; 'FFFFFB' = '4A4C70'
+    } }
+}
+if (-not $Themes.Contains([string]$State.Theme)) { $State.Theme = 'Midnight' }
+$ThemeMap = $Themes[[string]$State.Theme].Map
+
+function Map-Color([string]$c) {
+    # '#RRGGBB' or '#AARRGGBB' -> the same colour in the current theme
+    if (-not $ThemeMap.Count -or -not $c -or -not $c.StartsWith('#')) { return $c }
+    $h = $c.Substring(1).ToUpperInvariant()
+    if ($h.Length -eq 6) {
+        if ($ThemeMap.Contains($h)) { return '#' + $ThemeMap[$h] }
+    } elseif ($h.Length -eq 8) {
+        $rgb = $h.Substring(2)
+        if ($rgb -ne 'FFFFFF' -and $ThemeMap.Contains($rgb)) { return '#' + $h.Substring(0, 2) + $ThemeMap[$rgb] }
+    }
+    return $c
+}
+
+function Apply-Theme([string]$Xaml) {
+    if (-not $ThemeMap.Count) { return $Xaml }
+    return [regex]::Replace($Xaml, '#[0-9A-Fa-f]{8}\b|#[0-9A-Fa-f]{6}\b', { param($m) Map-Color $m.Value })
+}
+
+# =====================================================================
 #  Build the window
 # =====================================================================
 function Remove-Flair([string]$t) {
@@ -2351,6 +2570,7 @@ function Remove-Flair([string]$t) {
 }
 
 Import-AddOns
+$XamlText = Apply-Theme $XamlText
 $XamlUsed = if ($App.HasFlair) { $XamlText } else { Remove-Flair $XamlText }
 try {
     [xml]$XamlDoc = $XamlUsed
@@ -2375,8 +2595,9 @@ foreach ($node in $XamlDoc.SelectNodes('//*[@x:Name]', $nsm)) {
 
 $IconFont = New-Object System.Windows.Media.FontFamily('Segoe Fluent Icons, Segoe MDL2 Assets')
 $BrushConv = New-Object System.Windows.Media.BrushConverter
-function Get-Brush([string]$c) { return $BrushConv.ConvertFromString($c) }
+function Get-Brush([string]$c) { return $BrushConv.ConvertFromString((Map-Color $c)) }
 $Colors = @{ ok = '#3DDC97'; busy = '#5B8CFF'; bad = '#FF5C6C'; warn = '#FFB547'; idle = '#A3ACB9'; info = '#5B8CFF' }
+foreach ($k in @($Colors.Keys)) { $Colors[$k] = Map-Color $Colors[$k] }
 
 # =====================================================================
 #  Animations (built-in WPF; XamlFlair/Lottie add-ons when installed)
@@ -2427,7 +2648,7 @@ function Play-FadeIn($El, [int]$Ms = 160) {
 
 function Set-DotColor($El, [string]$Hex) {
     try {
-        $c = [System.Windows.Media.ColorConverter]::ConvertFromString($Hex)
+        $c = [System.Windows.Media.ColorConverter]::ConvertFromString((Map-Color $Hex))
         $b = $El.Fill
         if ($b -isnot [System.Windows.Media.SolidColorBrush]) { $El.Fill = New-Object System.Windows.Media.SolidColorBrush($c); return }
         if ($b.IsFrozen) { $b = $b.Clone(); $El.Fill = $b }
@@ -2442,6 +2663,8 @@ function Set-DotColor($El, [string]$Hex) {
 
 function Add-HoverGlow($Bd, [string]$Rest, [string]$Hot) {
     try {
+        $Rest = Map-Color $Rest
+        $Hot = Map-Color $Hot
         $Bd.BorderBrush = New-Object System.Windows.Media.SolidColorBrush ([System.Windows.Media.ColorConverter]::ConvertFromString($Rest))
         $Bd.BorderThickness = '1'
         $Bd.Add_MouseEnter({
@@ -2638,6 +2861,12 @@ function Close-Dialog([bool]$Ok) {
     if ($App.DlgFrame) { $App.DlgFrame.Continue = $false }
 }
 
+# =====================================================================
+#  Atomic design builders (see DESIGN.md)
+#  Atoms:      New-Text, New-Glyph
+#  Molecules:  New-Btn, New-IconBtn, New-Badge, New-IconCircle
+#  Organisms:  New-Row, Add-SessionRow, Render-Saved, Render-Detected
+# =====================================================================
 function New-Text([string]$Text, [double]$Size = 13, $Weight = $null, [string]$Color = '') {
     $t = New-Object System.Windows.Controls.TextBlock
     $t.Text = $Text
@@ -4737,6 +4966,41 @@ $UI.BtnBrowseScrcpy.Add_Click({
     }
 })
 $UI.AAutoConnect.Add_Click({ $State.AutoConnect = [bool]$UI.AAutoConnect.IsChecked; Save-State })
+function Show-ThemePreview([string]$Name) {
+    $UI.ThemeSwatch.Children.Clear()
+    $th = $Themes[$Name]
+    if (-not $th) { return }
+    foreach ($hex in $th.Swatch) {
+        $b = New-Object System.Windows.Controls.Border
+        $b.Width = 26; $b.Height = 26
+        $b.CornerRadius = '7'
+        $b.Margin = '0,0,6,0'
+        $b.BorderThickness = '1'
+        $b.BorderBrush = $BrushConv.ConvertFromString('#33808080')
+        $b.Background = $BrushConv.ConvertFromString('#' + $hex)   # real colour, not themed
+        $b.ToolTip = '#' + $hex
+        [void]$UI.ThemeSwatch.Children.Add($b)
+    }
+    $UI.BtnApplyTheme.IsEnabled = ($Name -ne [string]$State.Theme)
+}
+
+$UI.ATheme.Add_SelectionChanged({
+    $t = [string](Get-ComboTag $UI.ATheme)
+    if ($t) { Show-ThemePreview $t }
+})
+
+$UI.BtnApplyTheme.Add_Click({
+    $t = [string](Get-ComboTag $UI.ATheme)
+    if (-not $t -or $t -eq [string]$State.Theme) { return }
+    $running = @($App.Sessions | Where-Object { -not $_.Ended }).Count
+    $msg = 'Scrcpy Flow will close and open again in the new theme.'
+    if ($running) { $msg += ' Mirroring that is running now will stop.' }
+    $ok = Show-Dialog "Switch to $t?" $msg $false '' 'Restart now'
+    if ($null -eq $ok) { return }
+    $State.Theme = $t
+    Save-State
+    Restart-Studio
+})
 $UI.BtnRestartAdb.Add_Click({
     Show-Busy 'Restarting adb...'
     try {
@@ -4826,10 +5090,11 @@ $window.Dispatcher.Add_UnhandledException({
 $window.Add_SourceInitialized({
     try {
         $hwnd = (New-Object System.Windows.Interop.WindowInteropHelper($window)).Handle
-        $on = 1
+        $th = $Themes[[string]$State.Theme]
+        $on = if ($th.Dark) { 1 } else { 0 }
         [void][StudioNative]::DwmSetWindowAttribute($hwnd, 20, [ref]$on, 4)
         [void][StudioNative]::DwmSetWindowAttribute($hwnd, 19, [ref]$on, 4)
-        $cap = 0x0015110F
+        $cap = [int]$th.Caption
         [void][StudioNative]::DwmSetWindowAttribute($hwnd, 35, [ref]$cap, 4)
     } catch {}
 })
@@ -4886,6 +5151,9 @@ $UI.MRecDir.Text = [string]$State.RecordDir
 $UI.MShotDir.Text = [string]$State.ShotDir
 $UI.AScrcpy.Text = $App.Scrcpy
 $UI.AAutoConnect.IsChecked = [bool]$State.AutoConnect
+Fill-Options $UI.ATheme @($Themes.Keys | ForEach-Object { ,@($_, $_) })
+[void](Select-ComboTag $UI.ATheme $State.Theme)
+Show-ThemePreview ([string]$State.Theme)
 $App.Loading = $false
 
 Ensure-DefaultAnimations

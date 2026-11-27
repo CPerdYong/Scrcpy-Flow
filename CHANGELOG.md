@@ -3,6 +3,8 @@
 ## Unreleased - UI polish (Impeccable design pass)
 
 **Scrcpy Flow (Windows)**
+- Themes: Settings > Appearance > Theme, with a colour preview and an Apply button. Eight themes: Midnight (default), Twilight, Sky, Lavender, Khaki, Cream, Sky Light and Lavender Cream
+- Design system documented with atomic design (atoms, molecules, organisms, template, pages) in DESIGN.md; UI resources grouped the same way
 - Fixed missing spaces in the pairing steps and Game Mode tips
 - Clearer text: larger body text (Fluent type ramp), sentence-case field labels, stronger contrast for hints and labels
 - Buttons: deeper blue-violet fill so white labels are easy to read; soft shadow instead of a pulsing glow
