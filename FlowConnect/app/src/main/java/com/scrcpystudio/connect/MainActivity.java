@@ -25,7 +25,6 @@ import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
-import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -168,13 +167,12 @@ public class MainActivity extends Activity {
 
         // Header
         TextView title = UiKit.text(this, "Flow Connect", 28, UiKit.TEXT, true);
-        UiKit.gradientText(title, 0xFFFFFFFF, 0xFFB7A6FF);
         root.addView(title);
         TextView subtitle = UiKit.text(this, "Wireless link to Scrcpy Flow", 14, UiKit.SUB, false);
         subtitle.setPadding(0, dp(2), 0, dp(18));
         root.addView(subtitle);
         UiKit.fadeUp(title, 0);
-        UiKit.fadeUp(subtitle, 60);
+        UiKit.fadeUp(subtitle, 30);
 
         // Power area
         FrameLayout powerArea = new FrameLayout(this);
@@ -211,11 +209,11 @@ public class MainActivity extends Activity {
         powerButton.addView(labels, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         powerArea.addView(powerButton);
         root.addView(powerArea);
-        powerButton.setScaleX(0.6f);
-        powerButton.setScaleY(0.6f);
+        powerButton.setScaleX(0.88f);
+        powerButton.setScaleY(0.88f);
         powerButton.setAlpha(0f);
-        powerButton.animate().scaleX(1f).scaleY(1f).alpha(1f).setStartDelay(120).setDuration(650)
-                .setInterpolator(new OvershootInterpolator(1.6f)).start();
+        powerButton.animate().scaleX(1f).scaleY(1f).alpha(1f).setStartDelay(40).setDuration(420)
+                .setInterpolator(new DecelerateInterpolator(2.5f)).start();
 
         status = UiKit.text(this, "", 21, UiKit.TEXT, true);
         status.setGravity(Gravity.CENTER);
@@ -234,12 +232,12 @@ public class MainActivity extends Activity {
         root.addView(optionsCard);
         devCard = buildDevCard();
         root.addView(devCard);
-        UiKit.fadeUp(setupCard, 220);
-        UiKit.fadeUp(mirrorCard, 280);
-        UiKit.fadeUp(optionsCard, 360);
-        UiKit.fadeUp(devCard, 440);
+        UiKit.fadeUp(setupCard, 80);
+        UiKit.fadeUp(mirrorCard, 110);
+        UiKit.fadeUp(optionsCard, 140);
+        UiKit.fadeUp(devCard, 170);
 
-        versionText = UiKit.text(this, "Version " + BuildInfo.VERSION, 12, 0xFF6B7380, false);
+        versionText = UiKit.text(this, "Version " + BuildInfo.VERSION, 12, UiKit.SUB, false);
         versionText.setGravity(Gravity.CENTER);
         versionText.setPadding(0, dp(22), 0, dp(6));
         root.addView(versionText);
@@ -303,7 +301,7 @@ public class MainActivity extends Activity {
         segFrame.setLayoutParams(sfp);
         segFrame.setPadding(dp(4), dp(4), dp(4), dp(4));
         segHighlight = new View(this);
-        segHighlight.setBackground(UiKit.gradient(UiKit.ACCENT, UiKit.PURPLE, dp(13)));
+        segHighlight.setBackground(UiKit.gradient(UiKit.FILL_A, UiKit.FILL_B, dp(13)));
         segHighlight.setElevation(dp(3));
         segFrame.addView(segHighlight, new FrameLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT));
         LinearLayout segRow = new LinearLayout(this);
@@ -367,7 +365,6 @@ public class MainActivity extends Activity {
         head.setOrientation(LinearLayout.HORIZONTAL);
         head.setGravity(Gravity.CENTER_VERTICAL);
         TextView t = UiKit.text(this, "Developer mode", 18, UiKit.TEXT, true);
-        UiKit.gradientText(t, 0xFFFFC56B, 0xFFFF7AB6);
         head.addView(t, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
         devPill = UiKit.text(this, "", 12, UiKit.GOOD, true);
         devPill.setPadding(dp(10), dp(3), dp(10), dp(3));
@@ -410,6 +407,7 @@ public class MainActivity extends Activity {
             TextView chip = UiKit.text(this, ANIM_LABELS[i], 14, UiKit.SUB, true);
             chip.setGravity(Gravity.CENTER);
             chip.setPadding(0, dp(10), 0, dp(10));
+            chip.setMinHeight(dp(48));
             chip.setOnClickListener(v -> {
                 v.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK);
                 if (AdbWifi.setAnimationScale(this, ANIM_SCALES[idx])) {
@@ -561,7 +559,7 @@ public class MainActivity extends Activity {
         } else {
             mirrorBadge.setVisibility(View.GONE);
             startButton.setText("Start on PC");
-            startButton.setBackground(UiKit.ripple(UiKit.gradient(UiKit.ACCENT, UiKit.PURPLE, dp(16)), dp(16)));
+            startButton.setBackground(UiKit.ripple(UiKit.gradient(UiKit.FILL_A, UiKit.FILL_B, dp(16)), dp(16)));
             if ("waiting".equals(st) && age > 25000) {
                 mirrorStatus.setText("No answer from the PC. Is Scrcpy Flow open, and is this phone saved there?");
             } else if ("waiting".equals(st)) {
@@ -597,7 +595,7 @@ public class MainActivity extends Activity {
         }
         float x = Bridge.MODE_VIRTUAL.equals(mode) ? half : 0;
         if (animate) {
-            segHighlight.animate().translationX(x).setDuration(340).setInterpolator(new OvershootInterpolator(1.2f)).start();
+            segHighlight.animate().translationX(x).setDuration(220).setInterpolator(new DecelerateInterpolator(2f)).start();
         } else {
             segHighlight.setTranslationX(x);
         }
@@ -624,18 +622,18 @@ public class MainActivity extends Activity {
         devMaster.setText(devOn ? "Turn off Developer mode" : "Turn on Developer mode");
         devMaster.setBackground(devOn
                 ? UiKit.ripple(outlined(), dp(16))
-                : UiKit.ripple(UiKit.gradient(UiKit.ACCENT, UiKit.PURPLE, dp(16)), dp(16)));
+                : UiKit.ripple(UiKit.gradient(UiKit.FILL_A, UiKit.FILL_B, dp(16)), dp(16)));
         devMaster.setTextColor(devOn ? UiKit.TEXT : Color.WHITE);
 
         // Fade the details while Developer mode is off (they stay visible, just dimmed)
         if (lastDevOn == null || lastDevOn != devOn) {
-            devBody.animate().alpha(devOn ? 1f : 0.35f).setDuration(lastDevOn == null ? 0 : 350).setStartDelay(0).start();
+            devBody.animate().alpha(devOn ? 1f : 0.4f).setDuration(lastDevOn == null ? 0 : 220).setStartDelay(0).start();
             setEnabledDeep(devBody, devOn);
             if (lastDevOn != null) {
                 devMaster.setScaleX(0.94f);
                 devMaster.setScaleY(0.94f);
-                devMaster.animate().scaleX(1f).scaleY(1f).setDuration(380).setStartDelay(0)
-                        .setInterpolator(new OvershootInterpolator(3f)).start();
+                devMaster.animate().scaleX(1f).scaleY(1f).setDuration(180).setStartDelay(0)
+                        .setInterpolator(new DecelerateInterpolator(1.5f)).start();
                 UiKit.nudge(devHint);
             }
             lastDevOn = devOn;
@@ -650,7 +648,7 @@ public class MainActivity extends Activity {
             boolean sel = Math.abs(ANIM_SCALES[i] - scale) < 0.01f;
             chips[i].setTextColor(sel ? Color.WHITE : UiKit.SUB);
             chips[i].setBackground(sel
-                    ? UiKit.gradient(UiKit.ACCENT, UiKit.PURPLE, dp(12))
+                    ? UiKit.gradient(UiKit.FILL_A, UiKit.FILL_B, dp(12))
                     : UiKit.round(UiKit.CARD2, dp(12)));
         }
         String ip = AdbWifi.wifiIp(this);
@@ -822,7 +820,8 @@ public class MainActivity extends Activity {
         TextView b = UiKit.text(this, label, 16, Color.WHITE, true);
         b.setGravity(Gravity.CENTER);
         b.setPadding(dp(16), dp(15), dp(16), dp(15));
-        b.setBackground(UiKit.ripple(UiKit.gradient(UiKit.ACCENT, UiKit.PURPLE, dp(16)), dp(16)));
+        b.setMinHeight(dp(52));
+        b.setBackground(UiKit.ripple(UiKit.gradient(UiKit.FILL_A, UiKit.FILL_B, dp(16)), dp(16)));
         b.setElevation(dp(4));
         b.setClickable(true);
         UiKit.pressEffect(b, 0.96f);
@@ -833,6 +832,7 @@ public class MainActivity extends Activity {
         TextView b = UiKit.text(this, label, 15, UiKit.TEXT, true);
         b.setGravity(Gravity.CENTER);
         b.setPadding(dp(16), dp(13), dp(16), dp(13));
+        b.setMinHeight(dp(48));
         GradientDrawable bg = UiKit.round(UiKit.CARD2, dp(16));
         bg.setStroke(dp(1), UiKit.LINE);
         b.setBackground(UiKit.ripple(bg, dp(16)));
@@ -849,6 +849,7 @@ public class MainActivity extends Activity {
         s.setThumbTintList(UiKit.switchThumb());
         s.setTrackTintList(UiKit.switchTrack());
         s.setPadding(0, dp(8), 0, dp(8));
+        s.setMinHeight(dp(48));
         return s;
     }
 

@@ -919,7 +919,7 @@ $XamlText = @'
         xmlns:xf="clr-namespace:XamlFlair;assembly=XamlFlair.WPF"
         Title="Scrcpy Flow" Width="1140" Height="760" MinWidth="980" MinHeight="640"
         WindowStartupLocation="CenterScreen" Background="#0F1115"
-        FontFamily="Segoe UI Variable Text, Segoe UI" FontSize="13" Foreground="#E8EAED"
+        FontFamily="Segoe UI Variable Text, Segoe UI" FontSize="14" Foreground="#E8EAED"
         UseLayoutRounding="True" SnapsToDevicePixels="True">
   <Window.Resources>
     <SolidColorBrush x:Key="BrBg" Color="#0F1115"/>
@@ -929,7 +929,7 @@ $XamlText = @'
     <SolidColorBrush x:Key="BrField" Color="#11141A"/>
     <SolidColorBrush x:Key="BrLine" Color="#2A303B"/>
     <SolidColorBrush x:Key="BrText" Color="#E8EAED"/>
-    <SolidColorBrush x:Key="BrSub" Color="#9AA3AF"/>
+    <SolidColorBrush x:Key="BrSub" Color="#A3ACB9"/>
     <SolidColorBrush x:Key="BrAccent" Color="#5B8CFF"/>
     <SolidColorBrush x:Key="BrGood" Color="#3DDC97"/>
     <SolidColorBrush x:Key="BrBad" Color="#FF5C6C"/>
@@ -938,16 +938,8 @@ $XamlText = @'
 
     <!-- Gradients -->
     <LinearGradientBrush x:Key="GrAccent" StartPoint="0,0" EndPoint="1,1">
-      <GradientStop Color="#5B8CFF" Offset="0"/>
-      <GradientStop Color="#8B5CFF" Offset="1"/>
-    </LinearGradientBrush>
-    <LinearGradientBrush x:Key="GrAccentHi" StartPoint="0,0" EndPoint="1,1">
-      <GradientStop Color="#7AA2FF" Offset="0"/>
-      <GradientStop Color="#A47DFF" Offset="1"/>
-    </LinearGradientBrush>
-    <LinearGradientBrush x:Key="GrAccentV" StartPoint="0,0" EndPoint="0,1">
-      <GradientStop Color="#6E9BFF" Offset="0"/>
-      <GradientStop Color="#9B6BFF" Offset="1"/>
+      <GradientStop Color="#3F6BE6" Offset="0"/>
+      <GradientStop Color="#7A4FF0" Offset="1"/>
     </LinearGradientBrush>
     <LinearGradientBrush x:Key="GrCard" StartPoint="0,0" EndPoint="0,1">
       <GradientStop Color="#1C212B" Offset="0"/>
@@ -974,18 +966,13 @@ $XamlText = @'
       <GradientStop Color="#111318" Offset="1"/>
     </LinearGradientBrush>
     <LinearGradientBrush x:Key="GrNavSel" StartPoint="0,0" EndPoint="1,0">
-      <GradientStop Color="#2C3D70" Offset="0"/>
-      <GradientStop Color="#1B2135" Offset="1"/>
-    </LinearGradientBrush>
-    <LinearGradientBrush x:Key="GrTitle" StartPoint="0,0" EndPoint="1,0">
-      <GradientStop Color="#FFFFFF" Offset="0"/>
-      <GradientStop Color="#B4C6FF" Offset="0.6"/>
-      <GradientStop Color="#C9B4FF" Offset="1"/>
+      <GradientStop Color="#2A3A6C" Offset="0"/>
+      <GradientStop Color="#232B4A" Offset="1"/>
     </LinearGradientBrush>
     <!-- XamlFlair entrance animations (only used when the add-on is installed) -->
-    <xf:AnimationSettings x:Key="AnimFadeUp" Kind="FadeFrom,TranslateYFrom" Opacity="0" OffsetY="26" Duration="550"/>
-    <xf:AnimationSettings x:Key="AnimPop" Kind="FadeFrom,ScaleXFrom,ScaleYFrom" Opacity="0" ScaleX="0.94" ScaleY="0.94" Duration="500"/>
-    <xf:AnimationSettings x:Key="AnimFade" Kind="FadeFrom" Opacity="0" Duration="400"/>
+    <xf:AnimationSettings x:Key="AnimFadeUp" Kind="FadeFrom,TranslateYFrom" Opacity="0" OffsetY="8" Duration="240"/>
+    <xf:AnimationSettings x:Key="AnimPop" Kind="FadeFrom,ScaleXFrom,ScaleYFrom" Opacity="0" ScaleX="0.98" ScaleY="0.98" Duration="260"/>
+    <xf:AnimationSettings x:Key="AnimFade" Kind="FadeFrom" Opacity="0" Duration="200"/>
 
     <LinearGradientBrush x:Key="GrBanner" StartPoint="0,0" EndPoint="1,1">
       <GradientStop Color="#26365F" Offset="0"/>
@@ -994,26 +981,40 @@ $XamlText = @'
 
     <!-- Text -->
     <Style x:Key="H2" TargetType="TextBlock">
-      <Setter Property="FontSize" Value="15"/>
+      <Setter Property="FontSize" Value="16"/>
       <Setter Property="FontWeight" Value="SemiBold"/>
       <Setter Property="Foreground" Value="{StaticResource BrText}"/>
     </Style>
     <Style x:Key="Hint" TargetType="TextBlock">
       <Setter Property="Foreground" Value="{StaticResource BrSub}"/>
-      <Setter Property="FontSize" Value="12"/>
+      <Setter Property="FontSize" Value="13"/>
+      <Setter Property="LineHeight" Value="19"/>
       <Setter Property="TextWrapping" Value="Wrap"/>
-      <Setter Property="Margin" Value="0,3,0,0"/>
+      <Setter Property="MaxWidth" Value="760"/>
+      <Setter Property="HorizontalAlignment" Value="Left"/>
+      <Setter Property="Margin" Value="0,4,0,0"/>
     </Style>
     <Style x:Key="Label" TargetType="TextBlock">
-      <Setter Property="Foreground" Value="#7D8693"/>
-      <Setter Property="FontSize" Value="11"/>
+      <Setter Property="Foreground" Value="#B7BFCB"/>
+      <Setter Property="FontSize" Value="12"/>
       <Setter Property="FontWeight" Value="SemiBold"/>
-      <Setter Property="Margin" Value="0,12,0,5"/>
+      <Setter Property="Margin" Value="0,14,0,6"/>
     </Style>
     <Style x:Key="IconText" TargetType="TextBlock">
       <Setter Property="FontFamily" Value="{StaticResource Icons}"/>
       <Setter Property="VerticalAlignment" Value="Center"/>
       <Setter Property="Margin" Value="0,1,8,0"/>
+    </Style>
+
+    <!-- Keyboard focus ring (shows only when using Tab / arrow keys) -->
+    <Style x:Key="FocusRing">
+      <Setter Property="Control.Template">
+        <Setter.Value>
+          <ControlTemplate>
+            <Border Margin="-3" CornerRadius="11" BorderThickness="2" BorderBrush="#8FB0FF" SnapsToDevicePixels="True"/>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
     </Style>
 
     <!-- Card -->
@@ -1028,6 +1029,7 @@ $XamlText = @'
 
     <!-- Buttons: smooth hover glow and press "squish" -->
     <Style x:Key="BtnBase" TargetType="Button">
+      <Setter Property="FocusVisualStyle" Value="{StaticResource FocusRing}"/>
       <Setter Property="Foreground" Value="{StaticResource BrText}"/>
       <Setter Property="Background" Value="{StaticResource BrCard2}"/>
       <Setter Property="BorderBrush" Value="{StaticResource BrLine}"/>
@@ -1059,7 +1061,7 @@ $XamlText = @'
                 <Trigger.ExitActions>
                   <BeginStoryboard>
                     <Storyboard>
-                      <DoubleAnimation Storyboard.TargetName="hl" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.3"/>
+                      <DoubleAnimation Storyboard.TargetName="hl" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.18"/>
                     </Storyboard>
                   </BeginStoryboard>
                 </Trigger.ExitActions>
@@ -1068,22 +1070,22 @@ $XamlText = @'
                 <Trigger.EnterActions>
                   <BeginStoryboard>
                     <Storyboard>
-                      <DoubleAnimation Storyboard.TargetName="root" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="0.95" Duration="0:0:0.08"/>
-                      <DoubleAnimation Storyboard.TargetName="root" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="0.95" Duration="0:0:0.08"/>
+                      <DoubleAnimation Storyboard.TargetName="root" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="0.97" Duration="0:0:0.08"/>
+                      <DoubleAnimation Storyboard.TargetName="root" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="0.97" Duration="0:0:0.08"/>
                     </Storyboard>
                   </BeginStoryboard>
                 </Trigger.EnterActions>
                 <Trigger.ExitActions>
                   <BeginStoryboard>
                     <Storyboard>
-                      <DoubleAnimation Storyboard.TargetName="root" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="1" Duration="0:0:0.35">
+                      <DoubleAnimation Storyboard.TargetName="root" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="1" Duration="0:0:0.2">
                         <DoubleAnimation.EasingFunction>
-                          <BackEase EasingMode="EaseOut" Amplitude="0.6"/>
+                          <CubicEase EasingMode="EaseOut"/>
                         </DoubleAnimation.EasingFunction>
                       </DoubleAnimation>
-                      <DoubleAnimation Storyboard.TargetName="root" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1" Duration="0:0:0.35">
+                      <DoubleAnimation Storyboard.TargetName="root" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1" Duration="0:0:0.2">
                         <DoubleAnimation.EasingFunction>
-                          <BackEase EasingMode="EaseOut" Amplitude="0.6"/>
+                          <CubicEase EasingMode="EaseOut"/>
                         </DoubleAnimation.EasingFunction>
                       </DoubleAnimation>
                     </Storyboard>
@@ -1142,6 +1144,7 @@ $XamlText = @'
 
     <!-- Sidebar navigation: selection fades in, accent bar grows -->
     <Style x:Key="NavBtn" TargetType="RadioButton">
+      <Setter Property="FocusVisualStyle" Value="{StaticResource FocusRing}"/>
       <Setter Property="Foreground" Value="{StaticResource BrSub}"/>
       <Setter Property="FontSize" Value="14"/>
       <Setter Property="Cursor" Value="Hand"/>
@@ -1155,14 +1158,8 @@ $XamlText = @'
               <Border x:Name="hl" Background="White" CornerRadius="9" Opacity="0"/>
               <Border Background="Transparent" Padding="14,10">
                 <Grid>
-                  <Border x:Name="bar" Width="3" Height="18" CornerRadius="2" Background="{StaticResource GrAccentV}"
-                          HorizontalAlignment="Left" Margin="-14,0,0,0" RenderTransformOrigin="0.5,0.5">
-                    <Border.RenderTransform>
-                      <ScaleTransform ScaleY="0"/>
-                    </Border.RenderTransform>
-                  </Border>
                   <StackPanel Orientation="Horizontal">
-                    <TextBlock FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Margin="0,0,14,0"
+                    <TextBlock x:Name="ico" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Margin="0,0,14,0"
                                Text="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}"/>
                     <ContentPresenter VerticalAlignment="Center"/>
                   </StackPanel>
@@ -1181,30 +1178,25 @@ $XamlText = @'
                 <Trigger.ExitActions>
                   <BeginStoryboard>
                     <Storyboard>
-                      <DoubleAnimation Storyboard.TargetName="hl" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.3"/>
+                      <DoubleAnimation Storyboard.TargetName="hl" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.18"/>
                     </Storyboard>
                   </BeginStoryboard>
                 </Trigger.ExitActions>
               </Trigger>
               <Trigger Property="IsChecked" Value="True">
                 <Setter Property="Foreground" Value="#FFFFFF"/>
+                <Setter TargetName="ico" Property="Foreground" Value="#9DB8FF"/>
                 <Trigger.EnterActions>
                   <BeginStoryboard>
                     <Storyboard>
-                      <DoubleAnimation Storyboard.TargetName="sel" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.25"/>
-                      <DoubleAnimation Storyboard.TargetName="bar" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1" Duration="0:0:0.35">
-                        <DoubleAnimation.EasingFunction>
-                          <BackEase EasingMode="EaseOut" Amplitude="0.5"/>
-                        </DoubleAnimation.EasingFunction>
-                      </DoubleAnimation>
+                      <DoubleAnimation Storyboard.TargetName="sel" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.18"/>
                     </Storyboard>
                   </BeginStoryboard>
                 </Trigger.EnterActions>
                 <Trigger.ExitActions>
                   <BeginStoryboard>
                     <Storyboard>
-                      <DoubleAnimation Storyboard.TargetName="sel" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.25"/>
-                      <DoubleAnimation Storyboard.TargetName="bar" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="0" Duration="0:0:0.2"/>
+                      <DoubleAnimation Storyboard.TargetName="sel" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.15"/>
                     </Storyboard>
                   </BeginStoryboard>
                 </Trigger.ExitActions>
@@ -1217,6 +1209,7 @@ $XamlText = @'
 
     <!-- Toggle switch: knob slides, colour fades -->
     <Style TargetType="CheckBox">
+      <Setter Property="FocusVisualStyle" Value="{StaticResource FocusRing}"/>
       <Setter Property="Foreground" Value="{StaticResource BrText}"/>
       <Setter Property="Cursor" Value="Hand"/>
       <Setter Property="Margin" Value="0,7"/>
@@ -1246,26 +1239,26 @@ $XamlText = @'
                 <Trigger.EnterActions>
                   <BeginStoryboard>
                     <Storyboard>
-                      <DoubleAnimation Storyboard.TargetName="knob" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" To="18" Duration="0:0:0.35">
+                      <DoubleAnimation Storyboard.TargetName="knob" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" To="18" Duration="0:0:0.2">
                         <DoubleAnimation.EasingFunction>
-                          <BackEase EasingMode="EaseOut" Amplitude="0.45"/>
+                          <CubicEase EasingMode="EaseOut"/>
                         </DoubleAnimation.EasingFunction>
                       </DoubleAnimation>
-                      <DoubleAnimation Storyboard.TargetName="on" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.3"/>
-                      <DoubleAnimation Storyboard.TargetName="knobOn" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.3"/>
+                      <DoubleAnimation Storyboard.TargetName="on" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.2"/>
+                      <DoubleAnimation Storyboard.TargetName="knobOn" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.2"/>
                     </Storyboard>
                   </BeginStoryboard>
                 </Trigger.EnterActions>
                 <Trigger.ExitActions>
                   <BeginStoryboard>
                     <Storyboard>
-                      <DoubleAnimation Storyboard.TargetName="knob" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" To="0" Duration="0:0:0.35">
+                      <DoubleAnimation Storyboard.TargetName="knob" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" To="0" Duration="0:0:0.18">
                         <DoubleAnimation.EasingFunction>
-                          <BackEase EasingMode="EaseOut" Amplitude="0.45"/>
+                          <CubicEase EasingMode="EaseOut"/>
                         </DoubleAnimation.EasingFunction>
                       </DoubleAnimation>
-                      <DoubleAnimation Storyboard.TargetName="on" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.3"/>
-                      <DoubleAnimation Storyboard.TargetName="knobOn" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.3"/>
+                      <DoubleAnimation Storyboard.TargetName="on" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.18"/>
+                      <DoubleAnimation Storyboard.TargetName="knobOn" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.18"/>
                     </Storyboard>
                   </BeginStoryboard>
                 </Trigger.ExitActions>
@@ -1337,6 +1330,7 @@ $XamlText = @'
       </Setter>
     </Style>
     <Style TargetType="ComboBox">
+      <Setter Property="FocusVisualStyle" Value="{StaticResource FocusRing}"/>
       <Setter Property="Foreground" Value="{StaticResource BrText}"/>
       <Setter Property="Height" Value="36"/>
       <Setter Property="Cursor" Value="Hand"/>
@@ -1388,6 +1382,7 @@ $XamlText = @'
 
     <!-- Slider -->
     <Style TargetType="Slider">
+      <Setter Property="FocusVisualStyle" Value="{StaticResource FocusRing}"/>
       <Setter Property="Cursor" Value="Hand"/>
       <Setter Property="Template">
         <Setter.Value>
@@ -1479,10 +1474,24 @@ $XamlText = @'
     </Style>
 
     <Style TargetType="ToolTip">
-      <Setter Property="Background" Value="#262C38"/>
       <Setter Property="Foreground" Value="#E8EAED"/>
-      <Setter Property="BorderBrush" Value="#3A4150"/>
-      <Setter Property="Padding" Value="8,5"/>
+      <Setter Property="FontSize" Value="12"/>
+      <Setter Property="MaxWidth" Value="320"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="ToolTip">
+            <Border Background="#262C38" BorderBrush="#3A4150" BorderThickness="1" CornerRadius="8" Padding="10,6">
+              <ContentPresenter>
+                <ContentPresenter.Resources>
+                  <Style TargetType="TextBlock">
+                    <Setter Property="TextWrapping" Value="Wrap"/>
+                  </Style>
+                </ContentPresenter.Resources>
+              </ContentPresenter>
+            </Border>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
     </Style>
   </Window.Resources>
 
@@ -1528,8 +1537,8 @@ $XamlText = @'
             </Grid>
           </Border>
           <StackPanel Margin="12,0,0,0" VerticalAlignment="Center">
-            <TextBlock Text="Scrcpy Flow" FontSize="16" FontWeight="Bold"/>
-            <TextBlock x:Name="SideVersion" Text="starting..." FontSize="11" Foreground="{StaticResource BrSub}" Margin="0,2,0,0"/>
+            <TextBlock Text="Scrcpy Flow" FontSize="16" FontWeight="SemiBold"/>
+            <TextBlock x:Name="SideVersion" Text="starting..." FontSize="12" Foreground="{StaticResource BrSub}" Margin="0,2,0,0"/>
           </StackPanel>
         </StackPanel>
 
@@ -1541,14 +1550,13 @@ $XamlText = @'
               <TextBlock x:Name="AdbText" Text="Starting adb..." Margin="9,0,0,0" FontSize="12" Foreground="{StaticResource BrSub}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
-              <Ellipse x:Name="MirrorDot" Width="8" Height="8" Fill="#4A505C" VerticalAlignment="Center"/>
+              <Ellipse x:Name="MirrorDot" Width="8" Height="8" Fill="#6B7380" VerticalAlignment="Center"/>
               <TextBlock x:Name="SideSessions" Text="Nothing running" Margin="9,0,0,0" FontSize="12" Foreground="{StaticResource BrSub}"/>
             </StackPanel>
           </StackPanel>
         </Border>
 
         <StackPanel>
-          <TextBlock Text="MENU" Margin="26,0,0,8" FontSize="11" Foreground="#5F6772" FontWeight="SemiBold"/>
           <RadioButton x:Name="NavHome" Style="{StaticResource NavBtn}" Tag="&#xE80F;" Content="Home" IsChecked="True"/>
           <RadioButton x:Name="NavDevices" Style="{StaticResource NavBtn}" Tag="&#xE8EA;" Content="Devices"/>
           <RadioButton x:Name="NavGaming" Style="{StaticResource NavBtn}" Tag="&#xE7FC;" Content="Game Mode"/>
@@ -1567,8 +1575,8 @@ $XamlText = @'
 
       <Grid Margin="32,24,32,14">
         <StackPanel>
-          <TextBlock x:Name="PageTitle" Text="Home" FontSize="26" FontWeight="SemiBold" Foreground="{StaticResource GrTitle}"/>
-          <TextBlock x:Name="PageSub" Text="" FontSize="13" Foreground="{StaticResource BrSub}" Margin="0,3,0,0"/>
+          <TextBlock x:Name="PageTitle" Text="Home" FontSize="28" FontWeight="SemiBold" Foreground="{StaticResource BrText}"/>
+          <TextBlock x:Name="PageSub" Text="" FontSize="14" Foreground="{StaticResource BrSub}" Margin="0,4,0,0"/>
         </StackPanel>
         <Border HorizontalAlignment="Right" VerticalAlignment="Center" CornerRadius="16" Padding="14,7"
                 Background="#181C23" BorderBrush="{StaticResource BrLine}" BorderThickness="1">
@@ -1622,7 +1630,7 @@ $XamlText = @'
                                  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                     <StackPanel Margin="16,0,0,0" VerticalAlignment="Center">
-                      <TextBlock x:Name="InfoName" Text="No phone" FontSize="24" FontWeight="Bold" Foreground="White"
+                      <TextBlock x:Name="InfoName" Text="No phone" FontSize="24" FontWeight="SemiBold" Foreground="White"
                                  TextTrimming="CharacterEllipsis" MaxWidth="440"/>
                       <TextBlock x:Name="InfoAddr" Text="" Foreground="#B9C3E6" FontSize="12" Margin="0,3,0,0"
                                  TextTrimming="CharacterEllipsis" MaxWidth="460"/>
@@ -1633,25 +1641,25 @@ $XamlText = @'
                   <WrapPanel Margin="0,20,0,0">
                     <Border Background="#1FFFFFFF" CornerRadius="12" Padding="14,9" Margin="0,0,10,10" MinWidth="110">
                       <StackPanel>
-                        <TextBlock Text="BATTERY" FontSize="10" FontWeight="SemiBold" Foreground="#9FB0E0"/>
+                        <TextBlock Text="Battery" FontSize="12" Foreground="#B4C0E6"/>
                         <TextBlock x:Name="InfoBattery" Text="-" FontSize="16" FontWeight="SemiBold" Foreground="White" Margin="0,2,0,0"/>
                       </StackPanel>
                     </Border>
                     <Border Background="#1FFFFFFF" CornerRadius="12" Padding="14,9" Margin="0,0,10,10" MinWidth="110">
                       <StackPanel>
-                        <TextBlock Text="ANDROID" FontSize="10" FontWeight="SemiBold" Foreground="#9FB0E0"/>
+                        <TextBlock Text="Android" FontSize="12" Foreground="#B4C0E6"/>
                         <TextBlock x:Name="InfoAndroid" Text="-" FontSize="16" FontWeight="SemiBold" Foreground="White" Margin="0,2,0,0"/>
                       </StackPanel>
                     </Border>
                     <Border Background="#1FFFFFFF" CornerRadius="12" Padding="14,9" Margin="0,0,10,10" MinWidth="110">
                       <StackPanel>
-                        <TextBlock Text="CONNECTION" FontSize="10" FontWeight="SemiBold" Foreground="#9FB0E0"/>
+                        <TextBlock Text="Connection" FontSize="12" Foreground="#B4C0E6"/>
                         <TextBlock x:Name="InfoConn" Text="-" FontSize="16" FontWeight="SemiBold" Foreground="White" Margin="0,2,0,0"/>
                       </StackPanel>
                     </Border>
                     <Border Background="#1FFFFFFF" CornerRadius="12" Padding="14,9" Margin="0,0,10,10" MinWidth="110">
                       <StackPanel>
-                        <TextBlock Text="PROFILE" FontSize="10" FontWeight="SemiBold" Foreground="#9FB0E0"/>
+                        <TextBlock Text="Profile" FontSize="12" Foreground="#B4C0E6"/>
                         <TextBlock x:Name="InfoProfile" Text="-" FontSize="16" FontWeight="SemiBold" Foreground="White" Margin="0,2,0,0"
                                    TextTrimming="CharacterEllipsis" MaxWidth="160"/>
                       </StackPanel>
@@ -1685,7 +1693,7 @@ $XamlText = @'
             </Border>
 
             <!-- Pickers -->
-            <Border Style="{StaticResource CardBox}" Padding="20,8,20,18" xf:Animations.Primary="{xf:Animate BasedOn={StaticResource AnimFadeUp}, Delay=120}">
+            <Border Style="{StaticResource CardBox}" Padding="20,8,20,18" xf:Animations.Primary="{StaticResource AnimFadeUp}">
               <Grid>
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="*"/>
@@ -1695,11 +1703,11 @@ $XamlText = @'
                   <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel>
-                  <TextBlock Text="PHONE" Style="{StaticResource Label}"/>
+                  <TextBlock Text="Phone" Style="{StaticResource Label}"/>
                   <ComboBox x:Name="HomeDevice"/>
                 </StackPanel>
                 <StackPanel Grid.Column="2">
-                  <TextBlock Text="PROFILE" Style="{StaticResource Label}"/>
+                  <TextBlock Text="Profile" Style="{StaticResource Label}"/>
                   <ComboBox x:Name="HomeProfile"/>
                 </StackPanel>
                 <StackPanel Grid.Column="4" VerticalAlignment="Bottom">
@@ -1710,7 +1718,7 @@ $XamlText = @'
               </Grid>
             </Border>
 
-            <Border Style="{StaticResource CardBox}" xf:Animations.Primary="{xf:Animate BasedOn={StaticResource AnimFadeUp}, Delay=200}">
+            <Border Style="{StaticResource CardBox}" xf:Animations.Primary="{StaticResource AnimFadeUp}">
               <StackPanel>
                 <StackPanel Orientation="Horizontal">
                   <TextBlock Style="{StaticResource IconText}" Text="&#xE7F4;" Foreground="#3DDC97" FontSize="15"/>
@@ -1721,13 +1729,13 @@ $XamlText = @'
                 </StackPanel>
                 <StackPanel x:Name="SessionEmpty" Orientation="Horizontal" Margin="0,8,0,0">
                   <Grid x:Name="SessionIdleHost" Width="64" Height="64" Margin="0,0,12,0" Visibility="Collapsed"/>
-                  <TextBlock Text="Nothing is running. Press Start mirroring above." Style="{StaticResource Hint}" VerticalAlignment="Center" Margin="0"/>
+                  <TextBlock Text="Nothing is mirroring. Press Start mirroring above, or start from Flow Connect on your phone." Style="{StaticResource Hint}" VerticalAlignment="Center" Margin="0"/>
                 </StackPanel>
                 <StackPanel x:Name="SessionList" Margin="0,4,0,0"/>
               </StackPanel>
             </Border>
 
-            <Border Style="{StaticResource CardBox}" xf:Animations.Primary="{xf:Animate BasedOn={StaticResource AnimFadeUp}, Delay=280}">
+            <Border Style="{StaticResource CardBox}" xf:Animations.Primary="{StaticResource AnimFadeUp}">
               <StackPanel>
                 <Grid>
                   <StackPanel Orientation="Horizontal">
@@ -1750,7 +1758,7 @@ $XamlText = @'
             <Border Style="{StaticResource CardBox}">
               <StackPanel>
                 <TextBlock Text="Saved phones" Style="{StaticResource H2}"/>
-                <TextBlock Text="Pick a profile for each phone. The star marks your default phone. The download button installs Flow Connect, a phone app that turns Wireless debugging on with one tap and keeps it on after restarts." Style="{StaticResource Hint}"/>
+                <TextBlock Text="Each phone has its own profile. The star marks your default phone. The download button installs Flow Connect, which turns Wireless debugging on with one tap and keeps it on after restarts." Style="{StaticResource Hint}"/>
                 <TextBlock x:Name="SavedEmpty" Text="No saved phones yet. Use the QR code below to add one." Style="{StaticResource Hint}" Margin="0,12,0,0"/>
                 <StackPanel x:Name="SavedList" Margin="0,6,0,0"/>
               </StackPanel>
@@ -1810,25 +1818,25 @@ $XamlText = @'
                       <RowDefinition Height="Auto"/>
                       <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Text="1" FontWeight="Bold" Foreground="#5B8CFF" Margin="0,0,0,8"/>
-                    <TextBlock Grid.Column="1" TextWrapping="Wrap" Margin="0,0,0,8" Foreground="#C9CFD8">
-                      <Run Text="Settings &gt; About phone: tap"/>
+                    <TextBlock Text="1" FontWeight="SemiBold" Foreground="#8FB0FF" Margin="0,0,0,10"/>
+                    <TextBlock Grid.Column="1" TextWrapping="Wrap" Margin="0,0,0,10" LineHeight="20" Foreground="#C9CFD8">
+                      <Run Text="Settings &gt; About phone: tap "/>
                       <Run Text="OS version" FontWeight="SemiBold" Foreground="#E8EAED"/>
-                      <Run Text="(or Build number) 7 times to unlock Developer options."/>
+                      <Run Text=" (or Build number) 7 times to unlock Developer options."/>
                     </TextBlock>
-                    <TextBlock Grid.Row="1" Text="2" FontWeight="Bold" Foreground="#5B8CFF" Margin="0,0,0,8"/>
-                    <TextBlock Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" Margin="0,0,0,8" Foreground="#C9CFD8">
-                      <Run Text="In Developer options turn on"/>
+                    <TextBlock Grid.Row="1" Text="2" FontWeight="SemiBold" Foreground="#8FB0FF" Margin="0,0,0,10"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" Margin="0,0,0,10" LineHeight="20" Foreground="#C9CFD8">
+                      <Run Text="In Developer options, turn on "/>
                       <Run Text="Wireless debugging" FontWeight="SemiBold" Foreground="#E8EAED"/>
-                      <Run Text="(Xiaomi/Redmi: also turn on USB debugging (Security settings) so you can control the phone)."/>
+                      <Run Text=". Xiaomi, Redmi and POCO: also turn on USB debugging (Security settings) so you can control the phone."/>
                     </TextBlock>
-                    <TextBlock Grid.Row="2" Text="3" FontWeight="Bold" Foreground="#5B8CFF"/>
-                    <TextBlock Grid.Row="2" Grid.Column="1" TextWrapping="Wrap" Foreground="#C9CFD8">
-                      <Run Text="Click"/>
+                    <TextBlock Grid.Row="2" Text="3" FontWeight="SemiBold" Foreground="#8FB0FF"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1" TextWrapping="Wrap" LineHeight="20" Foreground="#C9CFD8">
+                      <Run Text="Click "/>
                       <Run Text="Show QR code" FontWeight="SemiBold" Foreground="#E8EAED"/>
-                      <Run Text="below, then on the phone tap Wireless debugging &gt;"/>
+                      <Run Text=" below, then on the phone tap Wireless debugging &gt; "/>
                       <Run Text="Pair device with QR code" FontWeight="SemiBold" Foreground="#E8EAED"/>
-                      <Run Text="and scan it."/>
+                      <Run Text=" and scan it."/>
                     </TextBlock>
                   </Grid>
                   <StackPanel Orientation="Horizontal" Margin="0,18,0,0">
@@ -1851,15 +1859,15 @@ $XamlText = @'
             <Border Style="{StaticResource CardBox}">
               <StackPanel>
                 <TextBlock Text="Other ways to add a phone" Style="{StaticResource H2}"/>
-                <Grid Margin="0,8,0,0">
+                <Grid Margin="0,14,0,0">
                   <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="16"/>
+                    <ColumnDefinition Width="0"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="16"/>
+                    <ColumnDefinition Width="0"/>
                     <ColumnDefinition Width="*"/>
                   </Grid.ColumnDefinitions>
-                  <Border Background="{StaticResource GrStat}" CornerRadius="12" Padding="16">
+                  <Border BorderBrush="{StaticResource BrLine}" BorderThickness="0" Padding="0,4,20,4">
                     <StackPanel>
                       <TextBlock FontFamily="{StaticResource Icons}" Text="&#xE88E;" FontSize="20" Foreground="#9DB8FF"/>
                       <TextBlock Text="With a USB cable" FontWeight="SemiBold" Margin="0,10,0,0"/>
@@ -1867,26 +1875,26 @@ $XamlText = @'
                       <Button x:Name="BtnAddUsb" Style="{StaticResource AccentBtn}" Content="Go wireless" HorizontalAlignment="Left" Margin="0,14,0,0"/>
                     </StackPanel>
                   </Border>
-                  <Border Grid.Column="2" Background="{StaticResource GrStat}" CornerRadius="12" Padding="16">
+                  <Border Grid.Column="2" BorderBrush="{StaticResource BrLine}" BorderThickness="1,0,0,0" Padding="20,4,20,4">
                     <StackPanel>
                       <TextBlock FontFamily="{StaticResource Icons}" Text="&#xE71B;" FontSize="20" Foreground="#9DB8FF"/>
                       <TextBlock Text="Pairing code (no cable)" FontWeight="SemiBold" Margin="0,10,0,0"/>
                       <TextBlock Text="If the QR scan does not work: Wireless debugging &gt; Pair device with pairing code." Style="{StaticResource Hint}"/>
-                      <TextBlock Text="IP ADDRESS : PORT" Style="{StaticResource Label}"/>
+                      <TextBlock Text="IP address and port" Style="{StaticResource Label}"/>
                       <TextBox x:Name="PairAddr"/>
-                      <TextBlock Text="6-DIGIT CODE" Style="{StaticResource Label}"/>
+                      <TextBlock Text="6-digit code" Style="{StaticResource Label}"/>
                       <TextBox x:Name="PairCode" MaxLength="6"/>
                       <Button x:Name="BtnPair" Style="{StaticResource AccentBtn}" Content="Pair and connect" HorizontalAlignment="Left" Margin="0,14,0,0"/>
                     </StackPanel>
                   </Border>
-                  <Border Grid.Column="4" Background="{StaticResource GrStat}" CornerRadius="12" Padding="16">
+                  <Border Grid.Column="4" BorderBrush="{StaticResource BrLine}" BorderThickness="1,0,0,0" Padding="20,4,0,4">
                     <StackPanel>
                       <TextBlock FontFamily="{StaticResource Icons}" Text="&#xE774;" FontSize="20" Foreground="#9DB8FF"/>
                       <TextBlock Text="By IP address" FontWeight="SemiBold" Margin="0,10,0,0"/>
                       <TextBlock Text="For a phone that is already in wireless mode." Style="{StaticResource Hint}"/>
-                      <TextBlock Text="NAME" Style="{StaticResource Label}"/>
+                      <TextBlock Text="Name" Style="{StaticResource Label}"/>
                       <TextBox x:Name="AddName"/>
-                      <TextBlock Text="IP ADDRESS (OPTIONAL :PORT)" Style="{StaticResource Label}"/>
+                      <TextBlock Text="IP address (optional :port)" Style="{StaticResource Label}"/>
                       <TextBox x:Name="AddAddr"/>
                       <Button x:Name="BtnAddIp" Style="{StaticResource AccentBtn}" Content="Save phone" HorizontalAlignment="Left" Margin="0,14,0,0"/>
                     </StackPanel>
@@ -1919,7 +1927,7 @@ $XamlText = @'
                              HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
                 <StackPanel Grid.Column="1" Margin="20,0,20,0" VerticalAlignment="Center">
-                  <TextBlock Text="Game Mode" FontSize="22" FontWeight="Bold" Foreground="White"/>
+                  <TextBlock Text="Game Mode" FontSize="22" FontWeight="SemiBold" Foreground="White"/>
                   <TextBlock Text="High frame rate, low latency, and real keyboard, mouse and controller input. Changes here are saved to the Gaming profile."
                              Foreground="#C9CFF5" TextWrapping="Wrap" Margin="0,4,0,0"/>
                   <Grid Margin="0,14,0,0" MaxWidth="420" HorizontalAlignment="Left">
@@ -1952,11 +1960,11 @@ $XamlText = @'
                     <TextBlock Style="{StaticResource IconText}" Text="&#xE945;" Foreground="#FFB547" FontSize="16"/>
                     <TextBlock Text="Performance" Style="{StaticResource H2}"/>
                   </StackPanel>
-                  <TextBlock Text="FRAME RATE" Style="{StaticResource Label}"/>
+                  <TextBlock Text="Frame rate" Style="{StaticResource Label}"/>
                   <ComboBox x:Name="GFps"/>
-                  <TextBlock Text="RESOLUTION" Style="{StaticResource Label}"/>
+                  <TextBlock Text="Resolution" Style="{StaticResource Label}"/>
                   <ComboBox x:Name="GSize"/>
-                  <TextBlock Text="VIDEO QUALITY (BITRATE)" Style="{StaticResource Label}"/>
+                  <TextBlock Text="Video quality (bitrate)" Style="{StaticResource Label}"/>
                   <Grid>
                     <Grid.ColumnDefinitions>
                       <ColumnDefinition Width="*"/>
@@ -1965,9 +1973,9 @@ $XamlText = @'
                     <Slider x:Name="GBitrate" Minimum="2" Maximum="40" TickFrequency="1" IsSnapToTickEnabled="True" LargeChange="2" VerticalAlignment="Center"/>
                     <TextBlock x:Name="GBitrateVal" Grid.Column="1" Text="12 Mbps" HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="SemiBold"/>
                   </Grid>
-                  <TextBlock Text="VIDEO CODEC" Style="{StaticResource Label}"/>
+                  <TextBlock Text="Video codec" Style="{StaticResource Label}"/>
                   <ComboBox x:Name="GCodec"/>
-                  <TextBlock Text="GAME AUDIO DELAY" Style="{StaticResource Label}"/>
+                  <TextBlock Text="Game audio delay" Style="{StaticResource Label}"/>
                   <ComboBox x:Name="GAudioBuf"/>
                   <CheckBox x:Name="GAudio" Content="Play game sound on PC" Margin="0,14,0,4"/>
                   <CheckBox x:Name="GPrintFps" Content="Show live FPS on Home"/>
@@ -1979,17 +1987,17 @@ $XamlText = @'
                     <TextBlock Style="{StaticResource IconText}" Text="&#xE765;" Foreground="#9DB8FF" FontSize="16"/>
                     <TextBlock Text="Controls" Style="{StaticResource H2}"/>
                   </StackPanel>
-                  <TextBlock Text="KEYBOARD" Style="{StaticResource Label}"/>
+                  <TextBlock Text="Keyboard" Style="{StaticResource Label}"/>
                   <ComboBox x:Name="GKeyboard"/>
-                  <TextBlock Text="MOUSE" Style="{StaticResource Label}"/>
+                  <TextBlock Text="Mouse" Style="{StaticResource Label}"/>
                   <ComboBox x:Name="GMouse"/>
-                  <TextBlock Text="GAME CONTROLLER" Style="{StaticResource Label}"/>
+                  <TextBlock Text="Game controller" Style="{StaticResource Label}"/>
                   <ComboBox x:Name="GGamepad"/>
-                  <Border Background="{StaticResource GrStat}" CornerRadius="10" Padding="12,10" Margin="0,14,0,6">
+                  <Border Padding="0" Margin="0,14,0,6">
                     <TextBlock Style="{StaticResource Hint}" Margin="0">
-                      <Run Text="Physical mode makes the phone see a real keyboard, mouse or controller, so it works in games that support them. Physical mouse captures your cursor:"/>
+                      <Run Text="Physical mode makes the phone see a real keyboard, mouse or controller, so it works in games that support them. Physical mouse captures your cursor: "/>
                       <Run Text="press Left Alt to release it." FontWeight="SemiBold" Foreground="#E8EAED"/>
-                      <Run Text="scrcpy does not map keys to screen taps."/>
+                      <Run Text=" scrcpy does not map keys to screen taps."/>
                     </TextBlock>
                   </Border>
                   <CheckBox x:Name="GKeepActive" Content="Keep phone screen on"/>
@@ -2016,18 +2024,18 @@ $XamlText = @'
                     <ColumnDefinition Width="*"/>
                   </Grid.ColumnDefinitions>
                   <StackPanel>
-                    <TextBlock Text="DISPLAY SIZE" Style="{StaticResource Label}"/>
+                    <TextBlock Text="Display size" Style="{StaticResource Label}"/>
                     <ComboBox x:Name="GVdSize"/>
                   </StackPanel>
                   <StackPanel Grid.Column="2">
-                    <TextBlock Text="UI SCALE (DPI)" Style="{StaticResource Label}"/>
+                    <TextBlock Text="UI scale (DPI)" Style="{StaticResource Label}"/>
                     <ComboBox x:Name="GVdDpi"/>
                   </StackPanel>
                   <StackPanel Grid.Column="4" VerticalAlignment="Bottom">
                     <CheckBox x:Name="GFlex" Content="Resize with the window"/>
                   </StackPanel>
                 </Grid>
-                <TextBlock Text="GAME TO OPEN (OPTIONAL)" Style="{StaticResource Label}"/>
+                <TextBlock Text="Game to open (optional)" Style="{StaticResource Label}"/>
                 <Grid>
                   <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -2058,7 +2066,7 @@ $XamlText = @'
               <Border Style="{StaticResource CardBox}">
                 <StackPanel>
                   <TextBlock Text="Save locations" Style="{StaticResource H2}"/>
-                  <TextBlock Text="RECORDINGS" Style="{StaticResource Label}"/>
+                  <TextBlock Text="Recordings" Style="{StaticResource Label}"/>
                   <Grid>
                     <Grid.ColumnDefinitions>
                       <ColumnDefinition Width="*"/>
@@ -2069,7 +2077,7 @@ $XamlText = @'
                     <Button x:Name="BtnRecDir" Grid.Column="1" Style="{StaticResource BtnBase}" Content="Change" Margin="8,0,0,0"/>
                     <Button x:Name="BtnOpenRec" Grid.Column="2" Style="{StaticResource IconBtn}" Content="&#xE838;" Margin="4,0,0,0" ToolTip="Open folder"/>
                   </Grid>
-                  <TextBlock Text="SCREENSHOTS" Style="{StaticResource Label}"/>
+                  <TextBlock Text="Screenshots" Style="{StaticResource Label}"/>
                   <Grid>
                     <Grid.ColumnDefinitions>
                       <ColumnDefinition Width="*"/>
@@ -2085,9 +2093,9 @@ $XamlText = @'
               <Border Grid.Column="2" Style="{StaticResource CardBox}">
                 <StackPanel>
                   <TextBlock Text="Recording" Style="{StaticResource H2}"/>
-                  <TextBlock Text="FILE FORMAT" Style="{StaticResource Label}"/>
+                  <TextBlock Text="File format" Style="{StaticResource Label}"/>
                   <ComboBox x:Name="MFormat"/>
-                  <TextBlock Text="STOP AUTOMATICALLY AFTER" Style="{StaticResource Label}"/>
+                  <TextBlock Text="Stop automatically after" Style="{StaticResource Label}"/>
                   <ComboBox x:Name="MLimit"/>
                   <TextBlock Text="Background recordings always use MKV, so the file stays playable when you press Stop."
                              Style="{StaticResource Hint}" Margin="0,10,0,0"/>
@@ -2162,11 +2170,11 @@ $XamlText = @'
                 <Border Style="{StaticResource CardBox}">
                   <StackPanel>
                     <TextBlock Text="Video" Style="{StaticResource H2}"/>
-                    <TextBlock Text="SHOW" Style="{StaticResource Label}"/>
+                    <TextBlock Text="Show" Style="{StaticResource Label}"/>
                     <ComboBox x:Name="SSource"/>
-                    <TextBlock Text="RESOLUTION" Style="{StaticResource Label}"/>
+                    <TextBlock Text="Resolution" Style="{StaticResource Label}"/>
                     <ComboBox x:Name="SSize"/>
-                    <TextBlock Text="QUALITY (BITRATE)" Style="{StaticResource Label}"/>
+                    <TextBlock Text="Quality (bitrate)" Style="{StaticResource Label}"/>
                     <Grid>
                       <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -2175,9 +2183,9 @@ $XamlText = @'
                       <Slider x:Name="SBitrate" Minimum="2" Maximum="40" TickFrequency="1" IsSnapToTickEnabled="True" LargeChange="2" VerticalAlignment="Center"/>
                       <TextBlock x:Name="SBitrateVal" Grid.Column="1" Text="8 Mbps" HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="SemiBold"/>
                     </Grid>
-                    <TextBlock Text="FRAME RATE LIMIT" Style="{StaticResource Label}"/>
+                    <TextBlock Text="Frame rate limit" Style="{StaticResource Label}"/>
                     <ComboBox x:Name="SFps"/>
-                    <TextBlock Text="CODEC" Style="{StaticResource Label}"/>
+                    <TextBlock Text="Codec" Style="{StaticResource Label}"/>
                     <ComboBox x:Name="SCodec"/>
                     <CheckBox x:Name="SRotLock" Content="Lock rotation to how the phone starts" Margin="0,14,0,0"/>
                   </StackPanel>
@@ -2186,9 +2194,9 @@ $XamlText = @'
                   <StackPanel>
                     <TextBlock Text="Audio" Style="{StaticResource H2}"/>
                     <CheckBox x:Name="SAudio" Content="Play phone sound on PC (Android 11+)" Margin="0,10,0,0"/>
-                    <TextBlock Text="SOUND SOURCE" Style="{StaticResource Label}"/>
+                    <TextBlock Text="Sound source" Style="{StaticResource Label}"/>
                     <ComboBox x:Name="SAudioSrc"/>
-                    <TextBlock Text="AUDIO DELAY" Style="{StaticResource Label}"/>
+                    <TextBlock Text="Audio delay" Style="{StaticResource Label}"/>
                     <ComboBox x:Name="SAudioBuf"/>
                   </StackPanel>
                 </Border>
@@ -2196,12 +2204,12 @@ $XamlText = @'
                   <StackPanel>
                     <TextBlock Text="Virtual display" Style="{StaticResource H2}"/>
                     <CheckBox x:Name="SVirtual" Content="Open on a separate virtual display" Margin="0,10,0,0"/>
-                    <TextBlock Text="SIZE" Style="{StaticResource Label}"/>
+                    <TextBlock Text="Size" Style="{StaticResource Label}"/>
                     <ComboBox x:Name="SVdSize"/>
-                    <TextBlock Text="UI SCALE (DPI)" Style="{StaticResource Label}"/>
+                    <TextBlock Text="UI scale (DPI)" Style="{StaticResource Label}"/>
                     <ComboBox x:Name="SVdDpi"/>
                     <CheckBox x:Name="SFlex" Content="Resize with the window" Margin="0,12,0,0"/>
-                    <TextBlock Text="APP TO OPEN (PACKAGE OR ?NAME)" Style="{StaticResource Label}"/>
+                    <TextBlock Text="App to open (package or ?name)" Style="{StaticResource Label}"/>
                     <TextBox x:Name="SStartApp"/>
                   </StackPanel>
                 </Border>
@@ -2221,11 +2229,11 @@ $XamlText = @'
                   <StackPanel>
                     <TextBlock Text="Input" Style="{StaticResource H2}"/>
                     <CheckBox x:Name="SNoControl" Content="View only (no mouse or keyboard control)" Margin="0,10,0,0"/>
-                    <TextBlock Text="KEYBOARD" Style="{StaticResource Label}"/>
+                    <TextBlock Text="Keyboard" Style="{StaticResource Label}"/>
                     <ComboBox x:Name="SKeyboard"/>
-                    <TextBlock Text="MOUSE" Style="{StaticResource Label}"/>
+                    <TextBlock Text="Mouse" Style="{StaticResource Label}"/>
                     <ComboBox x:Name="SMouse"/>
-                    <TextBlock Text="GAME CONTROLLER" Style="{StaticResource Label}"/>
+                    <TextBlock Text="Game controller" Style="{StaticResource Label}"/>
                     <ComboBox x:Name="SGamepad"/>
                   </StackPanel>
                 </Border>
@@ -2236,14 +2244,14 @@ $XamlText = @'
                     <CheckBox x:Name="SFullscreen" Content="Start fullscreen (F11 to toggle)"/>
                     <CheckBox x:Name="SBorderless" Content="Borderless window"/>
                     <CheckBox x:Name="SPrintFps" Content="Show live FPS on Home"/>
-                    <TextBlock Text="EXTRA SCRCPY OPTIONS (ADVANCED)" Style="{StaticResource Label}"/>
+                    <TextBlock Text="Extra scrcpy options (advanced)" Style="{StaticResource Label}"/>
                     <TextBox x:Name="SExtra" FontFamily="Cascadia Mono, Consolas"/>
                   </StackPanel>
                 </Border>
                 <Border Style="{StaticResource CardBox}">
                   <StackPanel>
                     <TextBlock Text="App" Style="{StaticResource H2}"/>
-                    <TextBlock Text="SCRCPY.EXE LOCATION" Style="{StaticResource Label}"/>
+                    <TextBlock Text="scrcpy.exe location" Style="{StaticResource Label}"/>
                     <Grid>
                       <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -2307,8 +2315,8 @@ $XamlText = @'
           </TextBlock>
           <TextBlock x:Name="BusyText" Text="Working..." HorizontalAlignment="Center" Margin="0,16,0,0" FontSize="15"
                      TextWrapping="Wrap" MaxWidth="380" TextAlignment="Center"/>
-          <TextBlock Text="This can take a few seconds." Foreground="{StaticResource BrSub}" FontSize="12"
-                     HorizontalAlignment="Center" Margin="0,5,0,0"/>
+          <TextBlock x:Name="BusySub" Text="This can take a few seconds." Foreground="{StaticResource BrSub}" FontSize="13"
+                     HorizontalAlignment="Center" Margin="0,6,0,0" TextWrapping="Wrap" MaxWidth="380" TextAlignment="Center"/>
         </StackPanel>
       </Border>
     </Border>
@@ -2368,11 +2376,15 @@ foreach ($node in $XamlDoc.SelectNodes('//*[@x:Name]', $nsm)) {
 $IconFont = New-Object System.Windows.Media.FontFamily('Segoe Fluent Icons, Segoe MDL2 Assets')
 $BrushConv = New-Object System.Windows.Media.BrushConverter
 function Get-Brush([string]$c) { return $BrushConv.ConvertFromString($c) }
-$Colors = @{ ok = '#3DDC97'; busy = '#5B8CFF'; bad = '#FF5C6C'; warn = '#FFB547'; idle = '#9AA3AF'; info = '#5B8CFF' }
+$Colors = @{ ok = '#3DDC97'; busy = '#5B8CFF'; bad = '#FF5C6C'; warn = '#FFB547'; idle = '#A3ACB9'; info = '#5B8CFF' }
 
 # =====================================================================
 #  Animations (built-in WPF; XamlFlair/Lottie add-ons when installed)
 # =====================================================================
+# Windows Settings > Accessibility > Visual effects > Animation effects
+$App.Motion = $true
+try { $App.Motion = [bool][System.Windows.SystemParameters]::ClientAreaAnimation } catch {}
+
 function New-Anim([double]$From, [double]$To, [int]$Ms, [bool]$Ease = $true) {
     $a = New-Object System.Windows.Media.Animation.DoubleAnimation
     $a.From = $From
@@ -2386,7 +2398,8 @@ function New-Anim([double]$From, [double]$To, [int]$Ms, [bool]$Ease = $true) {
     return $a
 }
 
-function Play-SlideIn($El, [double]$Dy = 14, [int]$Ms = 280) {
+function Play-SlideIn($El, [double]$Dy = 8, [int]$Ms = 220) {
+    if (-not $App.Motion) { return }
     try {
         $tt = New-Object System.Windows.Media.TranslateTransform
         $El.RenderTransform = $tt
@@ -2395,18 +2408,20 @@ function Play-SlideIn($El, [double]$Dy = 14, [int]$Ms = 280) {
     } catch {}
 }
 
-function Play-Pop($El, [int]$Ms = 240) {
+function Play-Pop($El, [int]$Ms = 200) {
+    if (-not $App.Motion) { return }
     try {
-        $st = New-Object System.Windows.Media.ScaleTransform(0.94, 0.94)
+        $st = New-Object System.Windows.Media.ScaleTransform(0.97, 0.97)
         $El.RenderTransformOrigin = New-Object System.Windows.Point(0.5, 0.5)
         $El.RenderTransform = $st
         $El.BeginAnimation([System.Windows.UIElement]::OpacityProperty, (New-Anim 0 1 $Ms))
-        $st.BeginAnimation([System.Windows.Media.ScaleTransform]::ScaleXProperty, (New-Anim 0.94 1 $Ms))
-        $st.BeginAnimation([System.Windows.Media.ScaleTransform]::ScaleYProperty, (New-Anim 0.94 1 $Ms))
+        $st.BeginAnimation([System.Windows.Media.ScaleTransform]::ScaleXProperty, (New-Anim 0.97 1 $Ms))
+        $st.BeginAnimation([System.Windows.Media.ScaleTransform]::ScaleYProperty, (New-Anim 0.97 1 $Ms))
     } catch {}
 }
 
-function Play-FadeIn($El, [int]$Ms = 180) {
+function Play-FadeIn($El, [int]$Ms = 160) {
+    if (-not $App.Motion) { return }
     try { $El.BeginAnimation([System.Windows.UIElement]::OpacityProperty, (New-Anim 0 1 $Ms)) } catch {}
 }
 
@@ -2447,6 +2462,7 @@ function Add-HoverGlow($Bd, [string]$Rest, [string]$Hot) {
 }
 
 function Start-Pulse($El, [double]$Low = 0.35, [int]$Ms = 900) {
+    if (-not $App.Motion) { return }
     try {
         $a = New-Anim 1 $Low $Ms $false
         $a.AutoReverse = $true
@@ -2462,22 +2478,26 @@ function Stop-Pulse($El) {
     } catch {}
 }
 
-function Start-Glow($Btn, [string]$Hex = '#8B5CFF') {
+function Set-Depth($El) {
+    # Soft shadow with a real offset, so the main action sits above the card
     try {
         $fx = New-Object System.Windows.Media.Effects.DropShadowEffect
-        $fx.Color = [System.Windows.Media.ColorConverter]::ConvertFromString($Hex)
-        $fx.ShadowDepth = 0
-        $fx.Opacity = 0.7
-        $fx.BlurRadius = 12
-        $Btn.Effect = $fx
-        $a = New-Anim 8 26 1600 $false
-        $a.AutoReverse = $true
-        $a.RepeatBehavior = [System.Windows.Media.Animation.RepeatBehavior]::Forever
-        $fx.BeginAnimation([System.Windows.Media.Effects.DropShadowEffect]::BlurRadiusProperty, $a)
+        $fx.Color = [System.Windows.Media.Colors]::Black
+        $fx.Direction = 270
+        $fx.ShadowDepth = 4
+        $fx.BlurRadius = 16
+        $fx.Opacity = 0.35
+        $El.Effect = $fx
     } catch {}
 }
 
-function Add-Entrance($El) {
+function Add-Entrance($El, [string]$Key = '') {
+    if ($Key) {
+        if (-not $App.SeenRows) { $App.SeenRows = @{} }
+        if ($App.SeenRows.ContainsKey($Key)) { return }
+        $App.SeenRows[$Key] = $true
+    }
+    if (-not $App.Motion) { return }
     if ($App.HasFlair) {
         try {
             $t = 'XamlFlair.Animations' -as [type]
@@ -2485,7 +2505,7 @@ function Add-Entrance($El) {
             return
         } catch {}
     }
-    Play-SlideIn $El 12 320
+    Play-SlideIn $El 8 220
 }
 
 function New-LottieView([string]$File, [double]$Size) {
@@ -2531,12 +2551,12 @@ function Update-Status {
         Set-Status "Mirroring $n $word" 'ok'
         $UI.SideSessions.Text = "$n running"
         Set-DotColor $UI.MirrorDot $Colors.ok
-        if (-not $App.Pulsing) { Start-Pulse $UI.MirrorDot; Start-Pulse $UI.StatusDot 0.4 1100; $App.Pulsing = $true }
+        if (-not $App.Pulsing) { Start-Pulse $UI.MirrorDot 0.4 1100; $App.Pulsing = $true }
     } else {
         Set-Status 'Ready' 'idle'
         $UI.SideSessions.Text = 'Nothing running'
-        Set-DotColor $UI.MirrorDot '#4A505C'
-        if ($App.Pulsing) { Stop-Pulse $UI.MirrorDot; Stop-Pulse $UI.StatusDot; $App.Pulsing = $false }
+        Set-DotColor $UI.MirrorDot '#6B7380'
+        if ($App.Pulsing) { Stop-Pulse $UI.MirrorDot; $App.Pulsing = $false }
     }
     $UI.SessionCount.Text = "$n"
     $UI.SessionEmpty.Visibility = if ($n -eq 0) { 'Visible' } else { 'Collapsed' }
@@ -2561,25 +2581,27 @@ function Show-Toast([string]$Text, [string]$Kind = 'info') {
     $UI.ToastText.Text = $Text
     Set-DotColor $UI.ToastDot $Colors[$Kind]
     $UI.Toast.Visibility = 'Visible'
-    Play-SlideIn $UI.Toast 20 260
+    Play-SlideIn $UI.Toast 12 200
     $ToastTimer.Stop()
     $ToastTimer.Start()
 }
 
-function Show-Busy([string]$Text) {
+function Show-Busy([string]$Text, [string]$Sub = 'This can take a few seconds.') {
     $App.BusyDepth++
     $UI.BusyText.Text = $Text
+    if ($App.BusyDepth -eq 1) { $UI.BusySub.Text = $Sub }
     if ($UI.BusyOverlay.Visibility -ne 'Visible') {
         $UI.BusyOverlay.Visibility = 'Visible'
-        Play-FadeIn $UI.BusyOverlay 180
-        Play-Pop $UI.BusyCard 260
+        Play-FadeIn $UI.BusyOverlay 160
+        Play-Pop $UI.BusyCard 200
     }
     Set-Status $Text 'busy'
     Invoke-UIEvents
 }
 
-function Set-BusyText([string]$Text) {
+function Set-BusyText([string]$Text, [string]$Sub = '') {
     $UI.BusyText.Text = $Text
+    if ($Sub) { $UI.BusySub.Text = $Sub }
     Set-Status $Text 'busy'
     Invoke-UIEvents
 }
@@ -2600,8 +2622,8 @@ function Show-Dialog([string]$Title, [string]$Message, [bool]$WithInput = $false
     $UI.DlgInput.Text = $Default
     $UI.DlgOk.Content = $OkText
     $UI.DlgOverlay.Visibility = 'Visible'
-    Play-FadeIn $UI.DlgOverlay 160
-    Play-Pop $UI.DlgCard 240
+    Play-FadeIn $UI.DlgOverlay 140
+    Play-Pop $UI.DlgCard 180
     if ($WithInput) { [void]$UI.DlgInput.Focus(); $UI.DlgInput.SelectAll() } else { [void]$UI.DlgOk.Focus() }
     $App.DlgResult = $null
     $App.DlgFrame = New-Object System.Windows.Threading.DispatcherFrame
@@ -2913,7 +2935,7 @@ function Add-SessionRow($s) {
     [void]$info.Children.Add((New-Text $s.Name 14 ([System.Windows.FontWeights]::SemiBold)))
     $sub = "$($s.ProfileName)  $Dot  $(Format-Serial $s.Serial)"
     if ($s.Background) { $sub = "Background recording  $Dot  $sub" }
-    $st = New-Text $sub 12 $null '#9AA3AF'
+    $st = New-Text $sub 12 $null '#A3ACB9'
     $st.Margin = '0,2,0,0'
     [void]$info.Children.Add($st)
     Put $g $info 1
@@ -3349,10 +3371,10 @@ function Render-Detected {
         }
         if ($x.SavedId) {
             $sd = Get-Device $x.SavedId
-            if ($sd) { [void]$line2.Children.Add((New-Text "Saved as $($sd.Name)" 12 $null '#9AA3AF')) }
+            if ($sd) { [void]$line2.Children.Add((New-Text "Saved as $($sd.Name)" 12 $null '#A3ACB9')) }
         } else {
             $shown = if ($x.Type -eq 'Nearby') { "$($x.Ip):$($x.Port)" } else { Format-Serial $x.Serial }
-            [void]$line2.Children.Add((New-Text $shown 12 $null '#9AA3AF'))
+            [void]$line2.Children.Add((New-Text $shown 12 $null '#A3ACB9'))
         }
         [void]$info.Children.Add($line2)
         Put $g $info 1
@@ -3373,7 +3395,7 @@ function Render-Detected {
         }
         Put $g $btns 2
         $row.Child = $g
-        Add-Entrance $row
+        Add-Entrance $row ("det:" + $x.Serial + ":" + $x.State)
         [void]$UI.DetectList.Children.Add($row)
     }
 }
@@ -3387,7 +3409,7 @@ function Render-Saved {
         $row = New-Row
         $g = New-Object System.Windows.Controls.Grid
         Add-Col $g 'Auto'; Add-Col $g '*'; Add-Col $g '200'; Add-Col $g 'Auto'
-        $dotColor = if ($det) { '#3DDC97' } else { '#4A505C' }
+        $dotColor = if ($det) { '#3DDC97' } else { '#6B7380' }
         Put $g (New-IconCircle 0xE8EA $dotColor) 0
 
         $info = New-Object System.Windows.Controls.StackPanel
@@ -3403,9 +3425,9 @@ function Render-Saved {
         [void]$info.Children.Add($nameLine)
         $parts = @()
         if ($d.Address) { $parts += [string]$d.Address } else { $parts += 'No Wi-Fi address yet' }
-        if ($d.Model) { $parts += [string]$d.Model }
+        if ($d.Model -and [string]$d.Model -ne [string]$d.Name) { $parts += [string]$d.Model }
         if ($det) { $parts += "connected ($($det.Type))" } else { $parts += 'not connected' }
-        $sub = New-Text ($parts -join "  $Dot  ") 12 $null '#9AA3AF'
+        $sub = New-Text ($parts -join "  $Dot  ") 12 $null '#A3ACB9'
         $sub.Margin = '0,3,0,0'
         [void]$info.Children.Add($sub)
         Put $g $info 1
@@ -3448,7 +3470,7 @@ function Render-Saved {
         [void]$btns.Children.Add((New-IconBtn 0xE74D 'Remove' $d.Id { param($b, $e) Remove-Device $b.Tag } '#FF8A95'))
         Put $g $btns 3
         $row.Child = $g
-        Add-Entrance $row
+        Add-Entrance $row ("saved:" + $d.Id)
         [void]$UI.SavedList.Children.Add($row)
     }
 }
@@ -3533,8 +3555,8 @@ function On-HomeDeviceChanged {
     $UI.InfoConn.Text = if ($conn) { $conn.Type } else { 'Not connected' }
     $UI.InfoBattery.Text = '-'
     $UI.InfoAndroid.Text = '-'
-    Play-SlideIn $UI.InfoName 8 280
-    Play-SlideIn $UI.InfoAddr 8 360
+    Play-FadeIn $UI.InfoName 180
+    Play-FadeIn $UI.InfoAddr 180
     Sync-HomeProfile
 }
 
@@ -3959,7 +3981,7 @@ function Build-Companion {
     while (-not $p.HasExited) {
         $mins = [int][math]::Floor($sw.Elapsed.TotalMinutes)
         $secs = $sw.Elapsed.Seconds
-        Set-BusyText ("Building the phone app... {0}:{1:00}`nThe first build can take 10-20 minutes." -f $mins, $secs)
+        Set-BusyText ("Building the phone app... {0}:{1:00}" -f $mins, $secs) 'The first build takes 10-20 minutes, later builds about a minute. Progress shows in the build window.'
         Wait-UI 500
         if ($sw.Elapsed.TotalMinutes -gt 45) { break }
     }
@@ -3979,7 +4001,7 @@ function Install-CompanionUi([string]$Id) {
         $r = Show-Dialog 'Build the new phone app first?' "The phone app has changes that are not built yet. Scrcpy Flow will build it now (a window opens; the first time takes 10-20 minutes), then install it on $($d.Name)." $false '' 'Build and install'
         if ($null -eq $r) { return }
         $built = $false
-        Show-Busy 'Building the phone app...'
+        Show-Busy 'Building the phone app...' 'The first build takes 10-20 minutes, later builds about a minute. Progress shows in the build window.'
         try { $built = Build-Companion } finally { Hide-Busy }
         if (-not $built) { Show-Toast 'The phone app could not be built. See Activity on Home.' 'bad'; return }
     }
@@ -4291,7 +4313,7 @@ function Refresh-Media {
         $txt = New-Object System.Windows.Controls.StackPanel
         $nm = New-Text $f.Name 12 ([System.Windows.FontWeights]::SemiBold)
         [void]$txt.Children.Add($nm)
-        $sub = New-Text ("{0}  $Dot  {1}" -f $f.LastWriteTime.ToString('d MMM, HH:mm'), (Format-Size $f.Length)) 11 $null '#9AA3AF'
+        $sub = New-Text ("{0}  $Dot  {1}" -f $f.LastWriteTime.ToString('d MMM, HH:mm'), (Format-Size $f.Length)) 12 $null '#A3ACB9'
         $sub.Margin = '0,2,0,0'
         [void]$txt.Children.Add($sub)
         Put $meta $txt 0
@@ -4311,7 +4333,7 @@ function Refresh-Media {
             if ($e.OriginalSource -is [System.Windows.Controls.TextBlock] -and $e.OriginalSource.FontFamily.Source -like '*Icons*') { return }
             try { Start-Process -FilePath ([string]$t.Tag) } catch { Show-Toast 'Could not open the file.' 'bad' }
         })
-        Add-Entrance $tile
+        Add-Entrance $tile ("media:" + $f.FullName)
         [void]$UI.MediaList.Children.Add($tile)
     }
 }
@@ -4611,8 +4633,8 @@ function Show-Page([string]$Key) {
     }
     $UI.PageTitle.Text = $Pages[$Key][1]
     $UI.PageSub.Text = $Pages[$Key][2]
-    Play-SlideIn $UI[$Pages[$Key][0]] 16 300
-    Play-SlideIn $UI.PageTitle 8 300
+    Play-SlideIn $UI[$Pages[$Key][0]] 8 200
+    Play-FadeIn $UI.PageTitle 160
     if ($Key -eq 'Media') { Refresh-Media }
     if ($Key -eq 'Gaming') { Load-Map 'G' }
 }
@@ -4869,8 +4891,8 @@ $App.Loading = $false
 Ensure-DefaultAnimations
 Setup-Lottie
 Update-AnimStatus
-Start-Glow $UI.BtnStart
-Start-Glow $UI.BtnGameLaunch '#B07BFF'
+Set-Depth $UI.BtnStart
+Set-Depth $UI.BtnGameLaunch
 
 Init-Map 'S' $SMap
 Init-Map 'G' $GMap

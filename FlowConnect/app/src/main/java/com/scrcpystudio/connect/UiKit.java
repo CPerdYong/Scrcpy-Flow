@@ -2,8 +2,6 @@ package com.scrcpystudio.connect;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.graphics.LinearGradient;
-import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -12,7 +10,6 @@ import android.graphics.drawable.RippleDrawable;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
-import android.view.animation.OvershootInterpolator;
 import android.widget.TextView;
 
 /** Colours, drawables and small animations shared by the app's screens. */
@@ -26,6 +23,9 @@ final class UiKit {
     static final int SUB = 0xFF9AA3AF;
     static final int ACCENT = 0xFF5B8CFF;
     static final int PURPLE = 0xFF8B5CFF;
+    /** Button fills: deep enough that white labels pass 4.5:1 contrast. */
+    static final int FILL_A = 0xFF3F6BE6;
+    static final int FILL_B = 0xFF7A4FF0;
     static final int GOOD = 0xFF3DDC97;
     static final int WARN = 0xFFFFB547;
     static final int BAD = 0xFFFF5C6C;
@@ -86,29 +86,19 @@ final class UiKit {
         return t;
     }
 
-    /** Paints the text of a TextView with a horizontal gradient. */
-    static void gradientText(final TextView t, final int c1, final int c2) {
-        t.post(() -> {
-            float w = t.getPaint().measureText(t.getText().toString());
-            if (w <= 0) return;
-            t.getPaint().setShader(new LinearGradient(0, 0, w, 0, c1, c2, Shader.TileMode.CLAMP));
-            t.invalidate();
-        });
-    }
-
     /** Fade and slide a view up into place. */
     static void fadeUp(View v, long delayMs) {
         v.setAlpha(0f);
-        v.setTranslationY(dp(v.getContext(), 26));
-        v.animate().alpha(1f).translationY(0f).setStartDelay(delayMs).setDuration(520)
-                .setInterpolator(new DecelerateInterpolator(2.2f)).start();
+        v.setTranslationY(dp(v.getContext(), 12));
+        v.animate().alpha(1f).translationY(0f).setStartDelay(delayMs).setDuration(260)
+                .setInterpolator(new DecelerateInterpolator(2f)).start();
     }
 
     /** Small fade/slide used when a text changes. */
     static void nudge(View v) {
-        v.setAlpha(0.2f);
-        v.setTranslationY(dp(v.getContext(), 8));
-        v.animate().alpha(1f).translationY(0f).setStartDelay(0).setDuration(320)
+        v.setAlpha(0.4f);
+        v.setTranslationY(dp(v.getContext(), 4));
+        v.animate().alpha(1f).translationY(0f).setStartDelay(0).setDuration(200)
                 .setInterpolator(new DecelerateInterpolator(2f)).start();
     }
 
@@ -117,11 +107,11 @@ final class UiKit {
         v.setOnTouchListener((view, ev) -> {
             int a = ev.getActionMasked();
             if (a == MotionEvent.ACTION_DOWN) {
-                view.animate().scaleX(scale).scaleY(scale).setDuration(90).setStartDelay(0)
+                view.animate().scaleX(scale).scaleY(scale).setDuration(80).setStartDelay(0)
                         .setInterpolator(new DecelerateInterpolator()).start();
             } else if (a == MotionEvent.ACTION_UP || a == MotionEvent.ACTION_CANCEL) {
-                view.animate().scaleX(1f).scaleY(1f).setDuration(380).setStartDelay(0)
-                        .setInterpolator(new OvershootInterpolator(3f)).start();
+                view.animate().scaleX(1f).scaleY(1f).setDuration(160).setStartDelay(0)
+                        .setInterpolator(new DecelerateInterpolator(1.5f)).start();
             }
             return false;
         });
