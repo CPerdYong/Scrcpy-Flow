@@ -1499,7 +1499,7 @@ $XamlText = @'
          rows, session rows and media tiles are built in code
          (New-Row, Add-SessionRow, Render-Saved, Render-Detected).
          TEMPLATE: sidebar (236) + page header + scrolling page (32 padding).
-         PAGES: PageHome, PageDevices, PageGaming, PageMedia, PageSettings.
+         PAGES: PageHome, PageDevices, PageGaming, PageMedia, PageActivity, PageSettings.
          ============================================================= -->
     <!-- Card -->
     <Style x:Key="CardBox" TargetType="Border">
@@ -1572,6 +1572,7 @@ $XamlText = @'
           <RadioButton x:Name="NavDevices" Style="{StaticResource NavBtn}" Tag="&#xE8EA;" Content="Devices"/>
           <RadioButton x:Name="NavGaming" Style="{StaticResource NavBtn}" Tag="&#xE7FC;" Content="Game Mode"/>
           <RadioButton x:Name="NavMedia" Style="{StaticResource NavBtn}" Tag="&#xE714;" Content="Recordings"/>
+          <RadioButton x:Name="NavActivity" Style="{StaticResource NavBtn}" Tag="&#xE9D9;" Content="Activity"/>
           <RadioButton x:Name="NavSettings" Style="{StaticResource NavBtn}" Tag="&#xE713;" Content="Settings"/>
         </StackPanel>
       </DockPanel>
@@ -1680,8 +1681,8 @@ $XamlText = @'
                 <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="24,0,0,0">
                   <Button x:Name="BtnStart" Style="{StaticResource BigAccentBtn}" Padding="30,16">
                     <StackPanel Orientation="Horizontal">
-                      <TextBlock Style="{StaticResource IconText}" Text="&#xE768;" FontSize="16"/>
-                      <TextBlock Text="Start mirroring" FontSize="15"/>
+                      <TextBlock x:Name="BtnStartIcon" Style="{StaticResource IconText}" Text="&#xE768;" FontSize="16"/>
+                      <TextBlock x:Name="BtnStartText" Text="Start mirroring" FontSize="15"/>
                     </StackPanel>
                   </Button>
                   <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
@@ -1746,22 +1747,29 @@ $XamlText = @'
               </StackPanel>
             </Border>
 
-            <Border Style="{StaticResource CardBox}" xf:Animations.Primary="{StaticResource AnimFadeUp}">
-              <StackPanel>
-                <Grid>
-                  <StackPanel Orientation="Horizontal">
-                    <TextBlock Style="{StaticResource IconText}" Text="&#xE9D9;" Foreground="#9DB8FF" FontSize="15"/>
-                    <TextBlock Text="Activity" Style="{StaticResource H2}"/>
-                  </StackPanel>
-                  <Button x:Name="BtnClearLog" Style="{StaticResource GhostBtn}" Content="Clear" HorizontalAlignment="Right" Margin="0,-6,-6,0"/>
-                </Grid>
-                <TextBox x:Name="LogBox" Height="190" Margin="0,10,0,0" IsReadOnly="True" TextWrapping="Wrap" AcceptsReturn="True"
-                         VerticalScrollBarVisibility="Auto" VerticalContentAlignment="Top" Background="#0E1116"
-                         FontFamily="Cascadia Mono, Consolas" FontSize="12" Foreground="#B9C0CA"/>
-              </StackPanel>
-            </Border>
           </StackPanel>
         </ScrollViewer>
+
+        <!-- ===================== ACTIVITY ===================== -->
+        <Grid x:Name="PageActivity" Visibility="Collapsed" Margin="32,4,32,32">
+          <Border Style="{StaticResource CardBox}" Margin="0">
+            <DockPanel>
+              <Grid DockPanel.Dock="Top">
+                <StackPanel>
+                  <TextBlock Text="Log" Style="{StaticResource H2}"/>
+                  <TextBlock Text="What Scrcpy Flow and scrcpy are doing: connections, pairing, mirroring and errors. Newest at the bottom." Style="{StaticResource Hint}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+                  <Button x:Name="BtnCopyLog" Style="{StaticResource BtnBase}" Content="Copy" Margin="0,0,8,0"/>
+                  <Button x:Name="BtnClearLog" Style="{StaticResource BtnBase}" Content="Clear"/>
+                </StackPanel>
+              </Grid>
+              <TextBox x:Name="LogBox" Margin="0,14,0,0" IsReadOnly="True" TextWrapping="Wrap" AcceptsReturn="True"
+                       VerticalScrollBarVisibility="Auto" VerticalContentAlignment="Top" Background="#0E1116"
+                       FontFamily="Cascadia Mono, Consolas" FontSize="12" Foreground="#B9C0CA"/>
+            </DockPanel>
+          </Border>
+        </Grid>
 
         <!-- ===================== DEVICES ===================== -->
         <ScrollViewer x:Name="PageDevices" Visibility="Collapsed" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
@@ -2782,6 +2790,7 @@ function Update-Status {
         if ($App.Pulsing) { Stop-Pulse $UI.MirrorDot; $App.Pulsing = $false }
     }
     $UI.SessionCount.Text = "$n"
+    Update-StartButton
     $UI.SessionEmpty.Visibility = if ($n -eq 0) { 'Visible' } else { 'Collapsed' }
 }
 
@@ -3262,7 +3271,7 @@ function Finish-Session($s) {
         } elseif ($joined -match 'encoder|codec') {
             Log 'The phone may not support this codec or size. Try H.264 or a lower resolution in Settings.' 'warn'
         }
-        Show-Toast "$($s.Name) stopped. See Activity for details." 'bad'
+        Show-Toast "$($s.Name) stopped. See the Activity page for details." 'bad'
     }
     if ($s.RecFile) {
         if (Test-Path -LiteralPath $s.RecFile) {
@@ -3760,6 +3769,7 @@ function Sync-HomeProfile {
 }
 
 function On-HomeDeviceChanged {
+    Update-StartButton
     $tag = [string](Get-ComboTag $UI.HomeDevice)
     $t = Resolve-Target $tag
     if (-not $t) {
@@ -3792,6 +3802,38 @@ function On-HomeDeviceChanged {
 # =====================================================================
 #  Actions
 # =====================================================================
+function Get-HomeSession {
+    # The running session for the phone picked on Home, if any
+    $tag = [string](Get-ComboTag $UI.HomeDevice)
+    if (-not $tag) { return $null }
+    $live = @($App.Sessions | Where-Object { -not $_.Ended })
+    $s = $live | Where-Object { $_.DeviceTag -eq $tag } | Select-Object -First 1
+    if (-not $s) {
+        $t = Resolve-Target $tag
+        if ($t) { $s = $live | Where-Object { $_.Name -eq $t.Name } | Select-Object -First 1 }
+    }
+    return $s
+}
+
+function Update-StartButton {
+    # Start mirroring turns into Stop mirroring while the Home phone is live
+    $s = Get-HomeSession
+    if ($s) {
+        $UI.BtnStartIcon.Text = [string][char]0xE71A
+        $UI.BtnStartText.Text = 'Stop mirroring'
+        $UI.BtnStart.ToolTip = "Stop mirroring $($s.Name)"
+    } else {
+        $UI.BtnStartIcon.Text = [string][char]0xE768
+        $UI.BtnStartText.Text = 'Start mirroring'
+        $UI.BtnStart.ToolTip = $null
+    }
+}
+
+function StartOrStop-FromHome {
+    $s = Get-HomeSession
+    if ($s) { Stop-Session $s.Id } else { Start-FromHome }
+}
+
 function Start-FromHome {
     $t = Resolve-Target ([string](Get-ComboTag $UI.HomeDevice))
     if (-not $t) { Show-Toast 'No phone selected. Add one on the Devices page.' 'warn'; return }
@@ -3804,7 +3846,7 @@ function Start-FromHome {
             Update-InfoFromPhone $serial $t
         }
     } finally { Hide-Busy }
-    if (-not $serial) { Show-Toast "Could not connect to $($t.Name). See Activity." 'bad'; return }
+    if (-not $serial) { Show-Toast "Could not connect to $($t.Name). See the Activity page." 'bad'; return }
     Start-Session -Serial $serial -Name $t.Name -Prof $prof -Record ([bool]$UI.HomeRecord.IsChecked) -Background ([bool]($UI.HomeRecord.IsChecked -and $UI.HomeBackground.IsChecked)) -DeviceTag $t.Tag
 }
 
@@ -3812,7 +3854,7 @@ function Run-GoWireless([string]$OnlySerial = '', [bool]$ThenMirror = $true) {
     Show-Busy 'Switching your phone to Wi-Fi...'
     $res = $null
     try { $res = Go-Wireless $OnlySerial } finally { Hide-Busy }
-    if (-not $res) { Show-Toast 'Could not go wireless. See Activity on Home.' 'bad'; return }
+    if (-not $res) { Show-Toast 'Could not go wireless. See the Activity page.' 'bad'; return }
     Show-Busy 'Updating device list...'
     try { Scan-Devices } finally { Hide-Busy }
     $tag = "saved:$($res.Device.Id)"
@@ -3844,7 +3886,7 @@ function Mirror-Saved([string]$Id) {
     Show-Busy "Connecting to $($d.Name)..."
     $serial = $null
     try { $serial = Ensure-Connected $t } finally { Hide-Busy }
-    if (-not $serial) { Show-Toast "Could not connect to $($d.Name). See Activity on Home." 'bad'; return }
+    if (-not $serial) { Show-Toast "Could not connect to $($d.Name). See the Activity page." 'bad'; return }
     Start-Session -Serial $serial -Name $d.Name -Prof (Get-Profile $d.Profile) -DeviceTag "saved:$Id"
 }
 
@@ -3888,7 +3930,7 @@ function Connect-Nearby([string]$Name) {
         if ($r.Text -match 'connected to') { $ok = $true; Wait-UI 500; Scan-Devices }
         elseif ($r.Text -match 'authenticat') { Log 'This phone is not paired with this PC yet. Use "Pair without cable" below.' 'warn' }
     } finally { Hide-Busy }
-    if ($ok) { Show-Toast 'Connected. Click Save to keep this phone.' 'ok' } else { Show-Toast 'Could not connect. See Activity on Home.' 'bad' }
+    if ($ok) { Show-Toast 'Connected. Click Save to keep this phone.' 'ok' } else { Show-Toast 'Could not connect. See the Activity page.' 'bad' }
 }
 
 function Set-DefaultDevice([string]$Id) {
@@ -4000,7 +4042,7 @@ function Pair-Phone {
         }
     } finally { Hide-Busy }
     if ($dev) { Show-Toast "$($dev.Name) is paired and saved. Press Mirror to start." 'ok' }
-    else { Show-Toast 'Pairing did not finish. See Activity on Home.' 'bad' }
+    else { Show-Toast 'Pairing did not finish. See the Activity page.' 'bad' }
 }
 
 # ---------------------------------------------------------------- QR pairing
@@ -4232,7 +4274,7 @@ function Install-CompanionUi([string]$Id) {
         $built = $false
         Show-Busy 'Building the phone app...' 'The first build takes 10-20 minutes, later builds about a minute. Progress shows in the build window.'
         try { $built = Build-Companion } finally { Hide-Busy }
-        if (-not $built) { Show-Toast 'The phone app could not be built. See Activity on Home.' 'bad'; return }
+        if (-not $built) { Show-Toast 'The phone app could not be built. See the Activity page.' 'bad'; return }
     }
     if (-not (Find-CompanionApk)) {
         [void](Show-Dialog 'Build the phone app first' "Run 'Build Flow Connect.bat' in the $(Split-Path (Get-CompanionDir) -Leaf) folder next to Scrcpy Flow. It downloads what it needs and builds the app. Then click the download button again." $false '' 'OK')
@@ -4245,7 +4287,7 @@ function Install-CompanionUi([string]$Id) {
         if ($serial) { $ok = Install-CompanionOn $serial $d }
     } finally { Hide-Busy }
     if ($ok) { Render-Saved; Show-Toast "Flow Connect installed on $($d.Name)." 'ok' }
-    else { Show-Toast 'Could not install the phone app. See Activity on Home.' 'bad' }
+    else { Show-Toast 'Could not install the phone app. See the Activity page.' 'bad' }
 }
 
 function Add-ByIp {
@@ -4294,7 +4336,7 @@ function Launch-Game {
     Show-Busy "Connecting to $($t.Name)..."
     $serial = $null
     try { $serial = Ensure-Connected $t } finally { Hide-Busy }
-    if (-not $serial) { Show-Toast "Could not connect to $($t.Name). See Activity on Home." 'bad'; return }
+    if (-not $serial) { Show-Toast "Could not connect to $($t.Name). See the Activity page." 'bad'; return }
     Start-Session -Serial $serial -Name $t.Name -Prof $prof -DeviceTag $t.Tag
 }
 
@@ -4853,6 +4895,7 @@ $Pages = [ordered]@{
     Devices  = @('PageDevices', 'Devices', 'Find, pair and manage your phones.')
     Gaming   = @('PageGaming', 'Game Mode', 'Low-latency play with keyboard, mouse or controller.')
     Media    = @('PageMedia', 'Recordings', 'Screen recordings and screenshots.')
+    Activity = @('PageActivity', 'Activity', 'Connection, pairing and mirroring log.')
     Settings = @('PageSettings', 'Settings', 'Profiles and app options.')
 }
 
@@ -4875,7 +4918,11 @@ $UI.NavHome.Add_Checked({ Show-Page 'Home' })
 $UI.NavDevices.Add_Checked({ Show-Page 'Devices' })
 $UI.NavGaming.Add_Checked({ Show-Page 'Gaming' })
 $UI.NavMedia.Add_Checked({ Show-Page 'Media' })
+$UI.NavActivity.Add_Checked({ Show-Page 'Activity' })
 $UI.NavSettings.Add_Checked({ Show-Page 'Settings' })
+$UI.BtnCopyLog.Add_Click({
+    try { [System.Windows.Clipboard]::SetText([string]$UI.LogBox.Text); Show-Toast 'Log copied.' 'ok' } catch { Show-Toast 'Could not copy the log.' 'bad' }
+})
 
 $UI.DlgOk.Add_Click({ Close-Dialog $true })
 $UI.DlgCancel.Add_Click({ Close-Dialog $false })
@@ -4885,7 +4932,7 @@ $UI.DlgInput.Add_KeyDown({
     elseif ($e.Key -eq 'Escape') { Close-Dialog $false }
 })
 
-$UI.BtnStart.Add_Click({ Start-FromHome })
+$UI.BtnStart.Add_Click({ StartOrStop-FromHome })
 $UI.BtnShot.Add_Click({ Shot-FromHome })
 $UI.BtnWireless.Add_Click({ Run-GoWireless '' $true })
 $UI.BtnRefreshInfo.Add_Click({ Refresh-PhoneInfo })
@@ -5083,7 +5130,7 @@ $window.Dispatcher.Add_UnhandledException({
     try { if ($ex.ErrorRecord -and $ex.ErrorRecord.InvocationInfo) { $where = " (line $($ex.ErrorRecord.InvocationInfo.ScriptLineNumber))" } } catch {}
     Write-Crash $ex
     Log "Unexpected error: $($ex.Message)$where" 'bad'
-    Show-Toast 'Something went wrong. Details are in Activity on Home.' 'bad'
+    Show-Toast 'Something went wrong. Details are on the Activity page.' 'bad'
 })
 
 # Dark title bar and icon

@@ -92,7 +92,7 @@ Sidebar (236 px) on the left. The main area has a page header (title, subtitle, 
 
 ## 5. Pages
 
-Home, Devices, Game Mode, Recordings, Settings (Windows). Flow Connect has one main screen.
+Home, Devices, Game Mode, Recordings, Activity, Settings (Windows). Flow Connect has one main screen.
 
 ---
 
